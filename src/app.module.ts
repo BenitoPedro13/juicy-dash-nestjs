@@ -11,10 +11,10 @@ import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [CategoriesModule, PrismaModule, ProductsModule, MulterModule.register({
-      dest: './uploads', // Specify the destination path for uploaded files
-    }),
-    CsvsModule,],
+    dest: './uploads', // Specify the destination path for uploaded files
+  }),
+    CsvsModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

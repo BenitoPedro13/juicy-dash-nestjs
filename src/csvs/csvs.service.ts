@@ -13,21 +13,22 @@ export class CsvsService {
 
   async processCsv(file: MulterFile): Promise<void> {
     const results = [];
-    const stream = Readable.from([file.buffer.toString()]);
-    
+    const stream = Readable.from([file.buffer.toString()]); // Convert buffer to string
+  
     await new Promise<void>((resolve, reject) => {
       stream
         .pipe(csvParser())
         .on('data', (data) => results.push(data))
         .on('end', () => resolve());
     });
-
-    await this.prisma.tabela.deleteMany({}); // Remove os dados existentes da tabela
-
+  
+    await this.prisma.tabela.deleteMany({});
+  
     for (const row of results) {
       await this.prisma.tabela.create({ data: row });
     }
   }
+  
 
   async getAllData(): Promise<any[]> {
     return this.prisma.tabela.findMany();
