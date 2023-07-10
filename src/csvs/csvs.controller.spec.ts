@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CsvsController } from './csvs.controller.ts';
-import { CsvsService } from './csvs.service.ts';
+import { CsvsController } from './csvs.controller';
+import { CsvsService } from './csvs.service';
 
 describe('CsvsController', () => {
   let controller: CsvsController;

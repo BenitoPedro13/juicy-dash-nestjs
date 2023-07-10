@@ -2,7 +2,7 @@ import fs from 'fs';
 import csvParser from 'csv-parser';
 import { MulterFile } from 'multer';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service.ts';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { Readable } from 'stream';
 // import { CreateCsvDto } from './dto/create-csv.dto';
 // import { UpdateCsvDto } from './dto/update-csv.dto';

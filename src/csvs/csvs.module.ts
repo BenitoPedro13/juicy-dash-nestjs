@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CsvsService } from './csvs.service.ts';
-import { CsvsController } from './csvs.controller.ts';
+import { CsvsService } from './csvs.service';
+import { CsvsController } from './csvs.controller';
 
 @Module({
   controllers: [CsvsController],
