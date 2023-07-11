@@ -28,7 +28,6 @@ export class CsvsService {
       await this.prisma.tabela.create({ data: row });
     }
   }
-  
 
   async getAllData(): Promise<any[]> {
     return this.prisma.tabela.findMany();
