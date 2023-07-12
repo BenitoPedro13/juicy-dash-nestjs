@@ -19,9 +19,11 @@ async function bootstrap() {
     isProduction: process.env.NODE_ENV === 'production',
     typingsPath: './typings.ts',
     typingsMaxDepth: 5,
-  }).addDataSource(createSqlDataSource(process.env.DATABASE_URL));
+  })
+    // Create your SQL datasource
+    .addDataSource(createSqlDataSource(process.env.DATABASE_URL));
 
-  agent.customizeCollection('Tabela', (collection) =>
+  agent.customizeCollection('Tabela', collection =>
     collection.addAction('Upload CSV', {
       scope: 'Global',
       form: [
