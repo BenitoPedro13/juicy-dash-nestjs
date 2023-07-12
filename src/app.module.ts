@@ -8,14 +8,18 @@ import { ProductsModule } from './products/products.module';
 // import { CategoriesService } from './categories/categories.service';
 import { CsvsModule } from './csvs/csvs.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { ChallengeController } from './challenge/challenge.controller'
 
 @Module({
-  imports: [CategoriesModule, PrismaModule, ProductsModule, MulterModule.register({
-    dest: './uploads', // Specify the destination path for uploaded files
-  }),
-    CsvsModule],
-  controllers: [AppController, ChallengeController],
+  imports: [
+    CategoriesModule,
+    PrismaModule,
+    ProductsModule,
+    MulterModule.register({
+      dest: './uploads', // Specify the destination path for uploaded files
+    }),
+    CsvsModule,
+  ],
+  controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
