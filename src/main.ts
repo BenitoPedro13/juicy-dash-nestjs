@@ -1,13 +1,11 @@
 import 'dotenv/config';
-import * as fs from 'fs';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 import { createAgent } from '@forestadmin/agent';
 import { createSqlDataSource } from '@forestadmin/datasource-sql';
 import { CsvsService } from './csvs/csvs.service';
-import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const logger = new Logger('App');
@@ -23,7 +21,7 @@ async function bootstrap() {
     // Create your SQL datasource
     .addDataSource(createSqlDataSource(process.env.DATABASE_URL));
 
-  agent.customizeCollection('Tabela', collection =>
+  agent.customizeCollection('Tabela', (collection) =>
     collection.addAction('Upload CSV', {
       scope: 'Global',
       form: [
@@ -45,7 +43,7 @@ async function bootstrap() {
           invalidated: ['Tabelas'],
         });
       },
-    })
+    }),
   );
 
   // const httpsOptions = {
@@ -62,7 +60,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       errorHttpStatusCode: 422,
-    })
+    }),
   );
 
   await app.listen(3000);
