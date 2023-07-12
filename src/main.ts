@@ -3,48 +3,36 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { useContainer } from 'class-validator';
-import { createAgent } from '@forestadmin/agent';
-import { createSqlDataSource } from '@forestadmin/datasource-sql';
-import { CsvsService } from './csvs/csvs.service';
+// import { CsvsService } from './csvs/csvs.service';
 
 async function bootstrap() {
   const logger = new Logger('App');
   logger.verbose('Starting application...');
 
-  const agent = createAgent({
-    authSecret: process.env.FOREST_AUTH_SECRET,
-    envSecret: process.env.FOREST_ENV_SECRET,
-    isProduction: process.env.NODE_ENV === 'production',
-    typingsPath: './typings.ts',
-    typingsMaxDepth: 5,
-  })
-    // Create your SQL datasource
-    .addDataSource(createSqlDataSource(process.env.DATABASE_URL));
+  // agent.customizeCollection('Tabela', (collection) =>
+  //   collection.addAction('Upload CSV', {
+  //     scope: 'Global',
+  //     form: [
+  //       {
+  //         label: 'Nova Tabela',
+  //         description: 'O Arquivo CSV com os novos dados da tabela.',
+  //         type: 'File',
+  //         isRequired: true,
+  //       },
+  //     ],
+  //     execute: async (context, resultBuilder) => {
+  //       const multerFile = {
+  //         buffer: context.formValues['Nova Tabela'].buffer,
+  //         originalname: 'file.csv', // você pode extrair o nome original do arquivo do contexto se necessário
+  //       };
+  //       await csvsService.processCsv(multerFile);
 
-  agent.customizeCollection('Tabela', (collection) =>
-    collection.addAction('Upload CSV', {
-      scope: 'Global',
-      form: [
-        {
-          label: 'Nova Tabela',
-          description: 'O Arquivo CSV com os novos dados da tabela.',
-          type: 'File',
-          isRequired: true,
-        },
-      ],
-      execute: async (context, resultBuilder) => {
-        const multerFile = {
-          buffer: context.formValues['Nova Tabela'].buffer,
-          originalname: 'file.csv', // você pode extrair o nome original do arquivo do contexto se necessário
-        };
-        await csvsService.processCsv(multerFile);
-
-        return resultBuilder.success('Tabela Atualizada', {
-          invalidated: ['Tabelas'],
-        });
-      },
-    }),
-  );
+  //       return resultBuilder.success('Tabela Atualizada', {
+  //         invalidated: ['Tabelas'],
+  //       });
+  //     },
+  //   }),
+  // );
 
   // const httpsOptions = {
   //   key: fs.readFileSync('./server.key'),
@@ -54,7 +42,7 @@ async function bootstrap() {
   // const app = await NestFactory.create(AppModule, { httpsOptions });
   const app = await NestFactory.create(AppModule);
 
-  const csvsService = app.get(CsvsService);
+  // const csvsService = app.get(CsvsService);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.useGlobalPipes(
@@ -64,7 +52,7 @@ async function bootstrap() {
   );
 
   await app.listen(3000);
-  await agent.mountOnNestJs(app).start();
+  // await agent.mountOnNestJs(app).start();
 
   logger.verbose('Application started successfully');
 }
