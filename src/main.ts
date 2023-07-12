@@ -15,7 +15,6 @@ async function bootstrap() {
     isProduction: process.env.NODE_ENV === 'production',
     typingsPath: './typings.ts',
     typingsMaxDepth: 5,
-
   })
     // Create your SQL datasource
     .addDataSource(createSqlDataSource(process.env.DATABASE_URL));
