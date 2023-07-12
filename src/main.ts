@@ -65,7 +65,7 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(8080);
+  await app.listen(3000);
   await agent.mountOnNestJs(app).start();
 
   logger.verbose('Application started successfully');
