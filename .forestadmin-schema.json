@@ -4,6 +4,148 @@
       "actions": [],
       "fields": [
         {
+          "defaultValue": 0,
+          "enums": null,
+          "field": "applied_steps_count",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": true,
+          "isPrimaryKey": false,
+          "isReadOnly": false,
+          "isRequired": true,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "Number",
+          "validations": [{"type": "is present", "message": "Field is required"}]
+        },
+        {
+          "defaultValue": null,
+          "enums": null,
+          "field": "checksum",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": true,
+          "isPrimaryKey": false,
+          "isReadOnly": false,
+          "isRequired": true,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "String",
+          "validations": [{"type": "is present", "message": "Field is required"}]
+        },
+        {
+          "defaultValue": null,
+          "enums": null,
+          "field": "finished_at",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": true,
+          "isPrimaryKey": false,
+          "isReadOnly": false,
+          "isRequired": false,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "Date",
+          "validations": []
+        },
+        {
+          "defaultValue": null,
+          "enums": null,
+          "field": "id",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": true,
+          "isPrimaryKey": true,
+          "isReadOnly": false,
+          "isRequired": true,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "String",
+          "validations": [{"type": "is present", "message": "Field is required"}]
+        },
+        {
+          "defaultValue": null,
+          "enums": null,
+          "field": "logs",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": true,
+          "isPrimaryKey": false,
+          "isReadOnly": false,
+          "isRequired": false,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "String",
+          "validations": []
+        },
+        {
+          "defaultValue": null,
+          "enums": null,
+          "field": "migration_name",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": true,
+          "isPrimaryKey": false,
+          "isReadOnly": false,
+          "isRequired": true,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "String",
+          "validations": [{"type": "is present", "message": "Field is required"}]
+        },
+        {
+          "defaultValue": null,
+          "enums": null,
+          "field": "rolled_back_at",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": true,
+          "isPrimaryKey": false,
+          "isReadOnly": false,
+          "isRequired": false,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "Date",
+          "validations": []
+        },
+        {
+          "defaultValue": null,
+          "enums": null,
+          "field": "started_at",
+          "integration": null,
+          "inverseOf": null,
+          "isFilterable": true,
+          "isPrimaryKey": false,
+          "isReadOnly": false,
+          "isRequired": false,
+          "isSortable": true,
+          "isVirtual": false,
+          "reference": null,
+          "type": "Date",
+          "validations": []
+        }
+      ],
+      "icon": null,
+      "integration": null,
+      "isReadOnly": false,
+      "isSearchable": true,
+      "isVirtual": false,
+      "name": "_prisma_migrations",
+      "onlyForRelationships": false,
+      "paginationType": "page",
+      "segments": []
+    },
+    {
+      "actions": [],
+      "fields": [
+        {
           "defaultValue": null,
           "enums": null,
           "field": "Products",
@@ -61,12 +203,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -107,13 +249,13 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": "Category.id",
           "relationship": "BelongsTo",
           "type": "Number",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -156,12 +298,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -172,12 +314,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "Number",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -239,12 +381,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -255,12 +397,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -271,12 +413,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -287,12 +429,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -303,12 +445,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -335,12 +477,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -367,12 +509,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -383,12 +525,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -399,12 +541,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -415,12 +557,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -447,12 +589,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         },
         {
           "defaultValue": null,
@@ -463,12 +605,12 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": null,
           "type": "String",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         }
       ],
       "icon": null,
@@ -486,6 +628,6 @@
     "liana": "forest-nodejs-agent",
     "liana_version": "1.13.4",
     "liana_features": null,
-    "stack": {"engine": "nodejs", "engine_version": "19.9.0"}
+    "stack": {"engine": "nodejs", "engine_version": "18.16.0"}
   }
 }
