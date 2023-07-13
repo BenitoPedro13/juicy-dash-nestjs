@@ -19,22 +19,22 @@ let CategoriesService = exports.CategoriesService = class CategoriesService {
     create(createCategoryDto) {
         return this.prisma.category.create({
             data: {
-                name: createCategoryDto.name
-            }
+                name: createCategoryDto.name,
+            },
         });
     }
     findAll() {
         return this.prisma.category.findMany({
             orderBy: {
                 createdAt: 'desc',
-            }
+            },
         });
     }
     findOne(id) {
         return this.prisma.category.findUniqueOrThrow({
             where: {
                 id,
-            }
+            },
         });
     }
     update(id, updateCategoryDto) {
@@ -42,14 +42,14 @@ let CategoriesService = exports.CategoriesService = class CategoriesService {
             where: {
                 id,
             },
-            data: updateCategoryDto
+            data: updateCategoryDto,
         });
     }
     remove(id) {
         return this.prisma.category.delete({
             where: {
                 id,
-            }
+            },
         });
     }
 };

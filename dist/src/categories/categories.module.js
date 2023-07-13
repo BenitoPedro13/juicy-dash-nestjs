@@ -15,7 +15,7 @@ let CategoriesModule = exports.CategoriesModule = class CategoriesModule {
 exports.CategoriesModule = CategoriesModule = __decorate([
     (0, common_1.Module)({
         controllers: [categories_controller_1.CategoriesController],
-        providers: [categories_service_1.CategoriesService]
+        providers: [categories_service_1.CategoriesService],
     })
 ], CategoriesModule);
 //# sourceMappingURL=categories.module.js.map
