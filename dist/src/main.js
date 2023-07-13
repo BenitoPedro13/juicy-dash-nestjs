@@ -8,7 +8,7 @@ const class_validator_1 = require("class-validator");
 async function bootstrap() {
     const logger = new common_1.Logger('App');
     logger.verbose('Starting application...');
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: false });
     (0, class_validator_1.useContainer)(app.select(app_module_1.AppModule), { fallbackOnErrors: true });
     app.useGlobalPipes(new common_1.ValidationPipe({
         errorHttpStatusCode: 422,
