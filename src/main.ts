@@ -42,6 +42,12 @@ async function bootstrap() {
   // const app = await NestFactory.create(AppModule, { httpsOptions });
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: '/*/', // ou o domínio que você quer permitir
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
   // const csvsService = app.get(CsvsService);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
