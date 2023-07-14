@@ -1,19 +1,19 @@
-GET http://localhost:3000/categories
+GET https://juicy-backend-benitopedro13.vercel.app/categories
 ###
-GET http://localhost:3000/categories/1
+GET https://juicy-backend-benitopedro13.vercel.app/categories/1
 ###
-POST http://localhost:3000/categories
+POST https://juicy-backend-benitopedro13.vercel.app/categories
 Content-Type: application/json
 
 {
     "name": "Categpry 1"
 }
 ###
-PATCH http://localhost:3000/categories/1
+PATCH https://juicy-backend-benitopedro13.vercel.app/categories/1
 Content-Type: application/json
 
 {
     "name": "Category Update"
 }
 ###
-DELETE http://localhost:3000/categories/4
+DELETE https://juicy-backend-benitopedro13.vercel.app/categories/4

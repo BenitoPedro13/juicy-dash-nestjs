@@ -1,4 +1,4 @@
-POST http://localhost:3000/csvs/upload
+POST https://juicy-backend-benitopedro13.vercel.app/csvs/upload
 Content-Type: multipart/form-data; boundary=boundary123
 
 --boundary123
@@ -19,4 +19,4 @@ Cola em Sampa,colaemsampa,São Paulo,1,1.854,32,30,1.854," R$  0,06 ","1,62%","R
 
 ###
 
-GET http://localhost:3000/csvs/data
+GET https://juicy-backend-benitopedro13.vercel.app/csvs/data
