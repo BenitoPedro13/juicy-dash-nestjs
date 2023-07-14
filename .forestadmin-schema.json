@@ -349,7 +349,28 @@
       "segments": []
     },
     {
-      "actions": [],
+      "actions": [
+        {
+          "id": "Tabela-0-upload-csv",
+          "name": "Upload CSV",
+          "type": "global",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/Tabela/0/upload-csv",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [
+            {
+              "description": "O Arquivo CSV com os novos dados da tabela.",
+              "isRequired": true,
+              "field": "Nova Tabela",
+              "type": "File",
+              "defaultValue": null
+            }
+          ],
+          "hooks": {"load": false, "change": ["changeHook"]}
+        }
+      ],
       "fields": [
         {
           "defaultValue": null,
