@@ -15,13 +15,11 @@ const prisma_module_1 = require("./prisma/prisma.module");
 const products_module_1 = require("./products/products.module");
 const csvs_module_1 = require("./csvs/csvs.module");
 const platform_express_1 = require("@nestjs/platform-express");
-const express_1 = require("@nestjs/express");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            express_1.CorsModule,
             categories_module_1.CategoriesModule,
             prisma_module_1.PrismaModule,
             products_module_1.ProductsModule,

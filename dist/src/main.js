@@ -43,8 +43,12 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: true });
     app.enableCors({
         origin: (origin, callback) => {
-            const allowedOrigins = [/\.forestadmin\.com$/, /\.vercel\.app$/, /^http:\/\/localhost:\d{4}/];
-            if (!origin || allowedOrigins.some(regex => regex.test(origin))) {
+            const allowedOrigins = [
+                /\.forestadmin\.com$/,
+                /\.vercel\.app$/,
+                /^http:\/\/localhost:\d{4}/,
+            ];
+            if (!origin || allowedOrigins.some((regex) => regex.test(origin))) {
                 callback(null, true);
             }
             else {
@@ -52,7 +56,7 @@ async function bootstrap() {
             }
         },
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        credentials: false,
+        credentials: true,
     });
     const csvsService = app.get(csvs_service_1.CsvsService);
     (0, class_validator_1.useContainer)(app.select(app_module_1.AppModule), { fallbackOnErrors: true });

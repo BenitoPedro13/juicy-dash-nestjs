@@ -50,16 +50,20 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      const allowedOrigins = [/\.forestadmin\.com$/,/\.vercel\.app$/,/^http:\/\/localhost:\d{4}/];
+      const allowedOrigins = [
+        /\.forestadmin\.com$/,
+        /\.vercel\.app$/,
+        /^http:\/\/localhost:\d{4}/,
+      ];
 
-      if (!origin || allowedOrigins.some(regex => regex.test(origin))) {
-	callback(null, true);
+      if (!origin || allowedOrigins.some((regex) => regex.test(origin))) {
+        callback(null, true);
       } else {
-	callback(new Error('Not allowed by CORS'));
+        callback(new Error('Not allowed by CORS'));
       }
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: false,
+    credentials: true,
   });
 
   const csvsService = app.get(CsvsService);
