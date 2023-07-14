@@ -8,9 +8,11 @@ import { ProductsModule } from './products/products.module';
 // import { CategoriesService } from './categories/categories.service';
 import { CsvsModule } from './csvs/csvs.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { CorsModule } from '@nestjs/express';
 
 @Module({
   imports: [
+    CorsModule,
     CategoriesModule,
     PrismaModule,
     ProductsModule,

@@ -46,10 +46,18 @@ async function bootstrap() {
     }),
   );
 
-  const app = await NestFactory.create(AppModule, { cors: false });
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   app.enableCors({
-    origin: '*', // ou o domínio que você quer permitir
+    origin: (origin, callback) => {
+      const allowedOrigins = [/\.forestadmin\.com$/,/\.vercel\.app$/,/^http:\/\/localhost:\d{4}/];
+
+      if (!origin || allowedOrigins.some(regex => regex.test(origin))) {
+	callback(null, true);
+      } else {
+	callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: false,
   });

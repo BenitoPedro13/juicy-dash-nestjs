@@ -40,9 +40,17 @@ async function bootstrap() {
             });
         },
     }));
-    const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: false });
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: true });
     app.enableCors({
-        origin: '*',
+        origin: (origin, callback) => {
+            const allowedOrigins = [/\.forestadmin\.com$/, /\.vercel\.app$/, /^http:\/\/localhost:\d{4}/];
+            if (!origin || allowedOrigins.some(regex => regex.test(origin))) {
+                callback(null, true);
+            }
+            else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: false,
     });
