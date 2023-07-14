@@ -41,6 +41,11 @@ async function bootstrap() {
         },
     }));
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: false });
+    app.enableCors({
+        origin: '*',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        credentials: false,
+    });
     const csvsService = app.get(csvs_service_1.CsvsService);
     (0, class_validator_1.useContainer)(app.select(app_module_1.AppModule), { fallbackOnErrors: true });
     app.useGlobalPipes(new common_1.ValidationPipe({
