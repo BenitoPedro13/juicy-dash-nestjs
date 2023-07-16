@@ -11,70 +11,85 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttachmentsController = void 0;
 const common_1 = require("@nestjs/common");
-const attachments_service_1 = require("./attachments.service");
-const update_attachment_dto_1 = require("./dto/update-attachment.dto");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
+const attachments_service_1 = require("./attachments.service");
+const update_attachment_dto_1 = require("./dto/update-attachment.dto");
+const uuid_1 = require("uuid");
 let AttachmentsController = exports.AttachmentsController = class AttachmentsController {
     constructor(attachmentsService) {
         this.attachmentsService = attachmentsService;
     }
-    create(file) {
+    async create(file) {
         console.log('file: ', file);
-        return 'File upload API';
+        const createdAttachment = await this.attachmentsService.create({
+            uniqueFilename: file.filename,
+            originalFilename: file.originalname,
+        });
+        return {
+            originalFilename: createdAttachment.originalFilename,
+            message: 'File uploaded successfully.',
+        };
     }
-    findAll() {
+    async findAll() {
         return this.attachmentsService.findAll();
     }
-    findOne(id) {
-        return this.attachmentsService.findOne(+id);
+    async findOne(id) {
+        return this.attachmentsService.findOne(id);
     }
-    update(id, updateAttachmentDto) {
-        return this.attachmentsService.update(+id, updateAttachmentDto);
+    async update(id, updateAttachmentDto) {
+        return this.attachmentsService.update(id, updateAttachmentDto);
     }
-    remove(id) {
-        return this.attachmentsService.remove(+id);
+    async remove(id) {
+        return this.attachmentsService.remove(id);
     }
 };
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './files',
+            filename: (req, file, callback) => {
+                const uniqueFilename = `${Date.now()}-${(0, uuid_1.v4)()}-${file.originalname}`;
+                callback(null, uniqueFilename);
+            },
+        }),
+    })),
     __param(0, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_a = typeof multer_1.MulterFile !== "undefined" && multer_1.MulterFile) === "function" ? _a : Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
 ], AttachmentsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AttachmentsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
 ], AttachmentsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_attachment_dto_1.UpdateAttachmentDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Number, update_attachment_dto_1.UpdateAttachmentDto]),
+    __metadata("design:returntype", Promise)
 ], AttachmentsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
 ], AttachmentsController.prototype, "remove", null);
 exports.AttachmentsController = AttachmentsController = __decorate([
     (0, common_1.Controller)('attachments'),

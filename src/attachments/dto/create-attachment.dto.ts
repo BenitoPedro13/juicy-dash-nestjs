@@ -1,1 +1,4 @@
-export class CreateAttachmentDto {}
+export class CreateAttachmentDto {
+  uniqueFilename: string;
+  originalFilename: string;
+}

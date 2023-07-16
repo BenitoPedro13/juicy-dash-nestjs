@@ -5,27 +5,45 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttachmentsService = void 0;
 const common_1 = require("@nestjs/common");
+const prisma_service_1 = require("../prisma/prisma.service");
 let AttachmentsService = exports.AttachmentsService = class AttachmentsService {
-    create(createAttachmentDto) {
-        return 'This action adds a new attachment';
+    constructor(prismaService) {
+        this.prismaService = prismaService;
+    }
+    async create(createAttachmentDto) {
+        const attachment = await this.prismaService.attachment.create({
+            data: createAttachmentDto,
+        });
+        return attachment;
     }
     findAll() {
-        return `This action returns all attachments`;
+        return this.prismaService.attachment.findMany();
     }
     findOne(id) {
-        return `This action returns a #${id} attachment`;
+        return this.prismaService.attachment.findUnique({
+            where: { id },
+        });
     }
     update(id, updateAttachmentDto) {
-        return `This action updates a #${id} attachment`;
+        return this.prismaService.attachment.update({
+            where: { id },
+            data: updateAttachmentDto,
+        });
     }
     remove(id) {
-        return `This action removes a #${id} attachment`;
+        return this.prismaService.attachment.delete({
+            where: { id },
+        });
     }
 };
 exports.AttachmentsService = AttachmentsService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], AttachmentsService);
 //# sourceMappingURL=attachments.service.js.map

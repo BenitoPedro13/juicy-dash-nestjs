@@ -1,52 +1,72 @@
 import {
   Controller,
-  Get,
   Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
   UseInterceptors,
   UploadedFile,
+  Get,
+  Param,
+  Patch,
+  Body,
+  Delete,
 } from '@nestjs/common';
-import { AttachmentsService } from './attachments.service';
-// import { CreateAttachmentDto } from './dto/create-attachment.dto';
-import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MulterFile } from 'multer';
+import { diskStorage } from 'multer';
+import { AttachmentsService } from './attachments.service';
+import { UpdateAttachmentDto } from './dto/update-attachment.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller('attachments')
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  create(@UploadedFile() file: MulterFile) {
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './files',
+        filename: (req, file, callback) => {
+          const uniqueFilename = `${Date.now()}-${uuidv4()}-${
+            file.originalname
+          }`;
+          callback(null, uniqueFilename);
+        },
+      }),
+    }),
+  )
+  async create(@UploadedFile() file: Express.Multer.File) {
     console.log('file: ', file);
 
-    return 'File upload API';
+    const createdAttachment = await this.attachmentsService.create({
+      uniqueFilename: file.filename,
+      originalFilename: file.originalname,
+    });
+
+    return {
+      originalFilename: createdAttachment.originalFilename,
+      message: 'File uploaded successfully.',
+    };
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.attachmentsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.attachmentsService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return this.attachmentsService.findOne(id);
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  async update(
+    @Param('id') id: number,
     @Body() updateAttachmentDto: UpdateAttachmentDto,
   ) {
-    return this.attachmentsService.update(+id, updateAttachmentDto);
+    return this.attachmentsService.update(id, updateAttachmentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.attachmentsService.remove(+id);
+  async remove(@Param('id') id: number) {
+    return this.attachmentsService.remove(id);
   }
 }

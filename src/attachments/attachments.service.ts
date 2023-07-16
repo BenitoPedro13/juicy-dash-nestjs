@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateAttachmentDto } from './dto/create-attachment.dto';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 
 @Injectable()
 export class AttachmentsService {
-  create(createAttachmentDto: CreateAttachmentDto) {
-    return 'This action adds a new attachment';
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async create(createAttachmentDto: CreateAttachmentDto) {
+    const attachment = await this.prismaService.attachment.create({
+      data: createAttachmentDto,
+    });
+
+    return attachment;
   }
 
   findAll() {
-    return `This action returns all attachments`;
+    return this.prismaService.attachment.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} attachment`;
+    return this.prismaService.attachment.findUnique({
+      where: { id },
+    });
   }
 
   update(id: number, updateAttachmentDto: UpdateAttachmentDto) {
-    return `This action updates a #${id} attachment`;
+    return this.prismaService.attachment.update({
+      where: { id },
+      data: updateAttachmentDto,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} attachment`;
+    return this.prismaService.attachment.delete({
+      where: { id },
+    });
   }
 }

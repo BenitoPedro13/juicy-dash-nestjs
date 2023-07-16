@@ -1,6 +1,5 @@
 // import fs from 'fs';
 import csvParser from 'csv-parser';
-import { MulterFile } from 'multer';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Readable } from 'stream';
@@ -11,7 +10,7 @@ import { Readable } from 'stream';
 export class CsvsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async processCsv(file: MulterFile): Promise<void> {
+  async processCsv(file: Express.Multer.File): Promise<void> {
     const results = [];
     const stream = Readable.from([file.buffer.toString()]); // Convert buffer to string
 

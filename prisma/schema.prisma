@@ -8,6 +8,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  uniqueFilename String
+  originalFilename String
+}
+
 model User {
   id        Int        @id @default(autoincrement())
   username  String
