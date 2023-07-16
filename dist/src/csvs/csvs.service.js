@@ -24,7 +24,7 @@ let CsvsService = exports.CsvsService = class CsvsService {
     async processCsv(file) {
         const results = [];
         const stream = stream_1.Readable.from([file.buffer.toString()]);
-        await new Promise((resolve, reject) => {
+        await new Promise((resolve) => {
             stream
                 .pipe((0, csv_parser_1.default)())
                 .on('data', (data) => results.push(data))

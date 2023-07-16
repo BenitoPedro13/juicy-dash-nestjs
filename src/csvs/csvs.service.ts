@@ -1,4 +1,4 @@
-import fs from 'fs';
+// import fs from 'fs';
 import csvParser from 'csv-parser';
 import { MulterFile } from 'multer';
 import { Injectable } from '@nestjs/common';
@@ -14,16 +14,16 @@ export class CsvsService {
   async processCsv(file: MulterFile): Promise<void> {
     const results = [];
     const stream = Readable.from([file.buffer.toString()]); // Convert buffer to string
-  
-    await new Promise<void>((resolve, reject) => {
+
+    await new Promise<void>((resolve) => {
       stream
         .pipe(csvParser())
         .on('data', (data) => results.push(data))
         .on('end', () => resolve());
     });
-  
+
     await this.prisma.tabela.deleteMany({});
-  
+
     for (const row of results) {
       await this.prisma.tabela.create({ data: row });
     }
