@@ -14,7 +14,6 @@ import { diskStorage } from 'multer';
 import { AttachmentsService } from './attachments.service';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 import { v4 as uuidv4 } from 'uuid';
-
 @Controller('attachments')
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
@@ -39,6 +38,7 @@ export class AttachmentsController {
     const createdAttachment = await this.attachmentsService.create({
       uniqueFilename: file.filename,
       originalFilename: file.originalname,
+      fileSize: file.size,
     });
 
     return {

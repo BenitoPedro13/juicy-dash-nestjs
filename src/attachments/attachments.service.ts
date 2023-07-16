@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAttachmentDto } from './dto/create-attachment.dto';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 
@@ -8,11 +8,9 @@ export class AttachmentsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createAttachmentDto: CreateAttachmentDto) {
-    const attachment = await this.prismaService.attachment.create({
+    return this.prismaService.attachment.create({
       data: createAttachmentDto,
     });
-
-    return attachment;
   }
 
   findAll() {
