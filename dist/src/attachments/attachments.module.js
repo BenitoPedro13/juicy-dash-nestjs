@@ -15,7 +15,7 @@ let AttachmentsModule = exports.AttachmentsModule = class AttachmentsModule {
 exports.AttachmentsModule = AttachmentsModule = __decorate([
     (0, common_1.Module)({
         controllers: [attachments_controller_1.AttachmentsController],
-        providers: [attachments_service_1.AttachmentsService]
+        providers: [attachments_service_1.AttachmentsService],
     })
 ], AttachmentsModule);
 //# sourceMappingURL=attachments.module.js.map

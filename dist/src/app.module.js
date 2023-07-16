@@ -13,6 +13,7 @@ const app_service_1 = require("./app.service");
 const prisma_module_1 = require("./prisma/prisma.module");
 const csvs_module_1 = require("./csvs/csvs.module");
 const platform_express_1 = require("@nestjs/platform-express");
+const attachments_module_1 = require("./attachments/attachments.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -23,6 +24,7 @@ exports.AppModule = AppModule = __decorate([
                 dest: './uploads',
             }),
             csvs_module_1.CsvsModule,
+            attachments_module_1.AttachmentsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

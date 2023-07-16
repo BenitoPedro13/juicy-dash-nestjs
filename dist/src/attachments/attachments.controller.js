@@ -11,18 +11,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttachmentsController = void 0;
 const common_1 = require("@nestjs/common");
 const attachments_service_1 = require("./attachments.service");
-const create_attachment_dto_1 = require("./dto/create-attachment.dto");
 const update_attachment_dto_1 = require("./dto/update-attachment.dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
 let AttachmentsController = exports.AttachmentsController = class AttachmentsController {
     constructor(attachmentsService) {
         this.attachmentsService = attachmentsService;
     }
-    create(createAttachmentDto) {
-        console.log('createAttachmentDto', createAttachmentDto);
+    create(file) {
+        console.log('file: ', file);
         return 'File upload API';
     }
     findAll() {
@@ -40,9 +42,10 @@ let AttachmentsController = exports.AttachmentsController = class AttachmentsCon
 };
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_attachment_dto_1.CreateAttachmentDto]),
+    __metadata("design:paramtypes", [typeof (_a = typeof multer_1.MulterFile !== "undefined" && multer_1.MulterFile) === "function" ? _a : Object]),
     __metadata("design:returntype", void 0)
 ], AttachmentsController.prototype, "create", null);
 __decorate([

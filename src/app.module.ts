@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { CsvsModule } from './csvs/csvs.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { AttachmentsModule } from './attachments/attachments.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MulterModule } from '@nestjs/platform-express';
       dest: './uploads', // Specify the destination path for uploaded files
     }),
     CsvsModule,
+    AttachmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

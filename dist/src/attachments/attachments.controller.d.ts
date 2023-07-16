@@ -1,10 +1,10 @@
 import { AttachmentsService } from './attachments.service';
-import { CreateAttachmentDto } from './dto/create-attachment.dto';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
+import { MulterFile } from 'multer';
 export declare class AttachmentsController {
     private readonly attachmentsService;
     constructor(attachmentsService: AttachmentsService);
-    create(createAttachmentDto: CreateAttachmentDto): string;
+    create(file: MulterFile): string;
     findAll(): string;
     findOne(id: string): string;
     update(id: string, updateAttachmentDto: UpdateAttachmentDto): string;

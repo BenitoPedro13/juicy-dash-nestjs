@@ -6,19 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { AttachmentsService } from './attachments.service';
-import { CreateAttachmentDto } from './dto/create-attachment.dto';
+// import { CreateAttachmentDto } from './dto/create-attachment.dto';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterFile } from 'multer';
 
 @Controller('attachments')
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
 
   @Post()
-  create(@Body() createAttachmentDto: CreateAttachmentDto) {
-    // return this.attachmentsService.create(createAttachmentDto);
-    console.log('createAttachmentDto', createAttachmentDto);
+  @UseInterceptors(FileInterceptor('file'))
+  create(@UploadedFile() file: MulterFile) {
+    console.log('file: ', file);
+
     return 'File upload API';
   }
 

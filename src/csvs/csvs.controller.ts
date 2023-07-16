@@ -1,9 +1,15 @@
-import { Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CsvsService } from './csvs.service';
 import { MulterFile } from 'multer';
-import { CreateCsvDto } from './dto/create-csv.dto';
-import { UpdateCsvDto } from './dto/update-csv.dto';
+// import { CreateCsvDto } from './dto/create-csv.dto';
+// import { UpdateCsvDto } from './dto/update-csv.dto';
 
 @Controller('csvs')
 export class CsvsController {
