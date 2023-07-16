@@ -14,33 +14,81 @@ export type Schema = {
     nested: {};
     flat: {};
   };
-  'Category': {
+  'Attachment': {
     plain: {
       'id': number;
-      'name': string;
-      'createdAt': string;
-      'updatedAt': string;
+      'uniqueFilename': string;
+      'originalFilename': string;
     };
     nested: {};
     flat: {};
   };
-  'Product': {
+  'Campaign': {
     plain: {
       'id': number;
-      'name': string;
-      'price': number;
-      'categoryId': number;
+      'influencerId': number;
+      'userId': number;
       'createdAt': string;
       'updatedAt': string;
     };
     nested: {
-      'category': Schema['Category']['plain'] & Schema['Category']['nested'];
+      'influencer': Schema['Influencer']['plain'] & Schema['Influencer']['nested'];
+      'user': Schema['User']['plain'] & Schema['User']['nested'];
     };
     flat: {
-      'category:id': number;
-      'category:name': string;
-      'category:createdAt': string;
-      'category:updatedAt': string;
+      'influencer:id': number;
+      'influencer:name': string;
+      'influencer:username': string;
+      'influencer:city': string;
+      'user:id': number;
+      'user:username': string;
+    };
+  };
+  'Influencer': {
+    plain: {
+      'id': number;
+      'name': string;
+      'username': string;
+      'city': string;
+    };
+    nested: {};
+    flat: {};
+  };
+  'Metric': {
+    plain: {
+      'id': number;
+      'posts': number;
+      'impressions': number;
+      'interactions': number;
+      'clicks': number;
+      'videoViews': number;
+      'cpe': string;
+      'ctr': string;
+      'cpc': string;
+      'cpv': string;
+      'campaignId': number;
+      'influencerId': number;
+    };
+    nested: {
+      'campaign': Schema['Campaign']['plain'] & Schema['Campaign']['nested'];
+      'influencer': Schema['Influencer']['plain'] & Schema['Influencer']['nested'];
+    };
+    flat: {
+      'campaign:id': number;
+      'campaign:influencerId': number;
+      'campaign:userId': number;
+      'campaign:createdAt': string;
+      'campaign:updatedAt': string;
+      'campaign:influencer:id': number;
+      'campaign:influencer:name': string;
+      'campaign:influencer:username': string;
+      'campaign:influencer:city': string;
+      'campaign:user:id': number;
+      'campaign:user:username': string;
+      'influencer:id': number;
+      'influencer:name': string;
+      'influencer:username': string;
+      'influencer:city': string;
     };
   };
   'Tabela': {
@@ -60,6 +108,14 @@ export type Schema = {
       'cpv': string;
       'createdAt': string;
       'updatedAt': string;
+    };
+    nested: {};
+    flat: {};
+  };
+  'User': {
+    plain: {
+      'id': number;
+      'username': string;
     };
     nested: {};
     flat: {};
