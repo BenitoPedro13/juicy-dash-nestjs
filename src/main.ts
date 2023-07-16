@@ -47,7 +47,7 @@ async function bootstrap() {
   );
 
   const app = await NestFactory.create(AppModule, { cors: true });
-
+  await agent.mountOnNestJs(app).start();
   app.enableCors({
     origin: (origin, callback) => {
       const allowedOrigins = [
@@ -74,9 +74,7 @@ async function bootstrap() {
       errorHttpStatusCode: 422,
     }),
   );
-  await agent.mountOnNestJs(app).start();
   await app.listen(3000);
-
   logger.verbose('Application started successfully');
 }
 

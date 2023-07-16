@@ -19,6 +19,9 @@ export type Schema = {
       'id': number;
       'uniqueFilename': string;
       'originalFilename': string;
+      'fileSize': number;
+      'createdAt': string;
+      'updatedAt': string;
     };
     nested: {};
     flat: {};
