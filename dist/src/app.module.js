@@ -10,9 +10,7 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
-const categories_module_1 = require("./categories/categories.module");
 const prisma_module_1 = require("./prisma/prisma.module");
-const products_module_1 = require("./products/products.module");
 const csvs_module_1 = require("./csvs/csvs.module");
 const platform_express_1 = require("@nestjs/platform-express");
 let AppModule = exports.AppModule = class AppModule {
@@ -20,9 +18,7 @@ let AppModule = exports.AppModule = class AppModule {
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            categories_module_1.CategoriesModule,
             prisma_module_1.PrismaModule,
-            products_module_1.ProductsModule,
             platform_express_1.MulterModule.register({
                 dest: './uploads',
             }),
