@@ -22,7 +22,8 @@ let AttachmentsController = exports.AttachmentsController = class AttachmentsCon
         this.attachmentsService = attachmentsService;
     }
     create(createAttachmentDto) {
-        return this.attachmentsService.create(createAttachmentDto);
+        console.log('createAttachmentDto', createAttachmentDto);
+        return 'File upload API';
     }
     findAll() {
         return this.attachmentsService.findAll();
