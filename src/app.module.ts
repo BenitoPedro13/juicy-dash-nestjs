@@ -3,18 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { CsvsModule } from './csvs/csvs.module';
-import { MulterModule } from '@nestjs/platform-express';
+// import { MulterModule } from '@nestjs/platform-express';
 import { AttachmentsModule } from './attachments/attachments.module';
 
 @Module({
-  imports: [
-    PrismaModule,
-    MulterModule.register({
-      dest: './uploads', // Specify the destination path for uploaded files
-    }),
-    CsvsModule,
-    AttachmentsModule,
-  ],
+  imports: [PrismaModule, CsvsModule, AttachmentsModule],
   controllers: [AppController],
   providers: [AppService],
 })
