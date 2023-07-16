@@ -1,6 +1,8 @@
 # compiled output
 /node_modules
 /.pnpm-store
+/dist
+/uploads
 
 # Logs
 logs

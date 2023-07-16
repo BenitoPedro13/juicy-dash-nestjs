@@ -1,9 +1,14 @@
-import { Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CsvsService } from './csvs.service';
-import { MulterFile } from 'multer';
-import { CreateCsvDto } from './dto/create-csv.dto';
-import { UpdateCsvDto } from './dto/update-csv.dto';
+// import { CreateCsvDto } from './dto/create-csv.dto';
+// import { UpdateCsvDto } from './dto/update-csv.dto';
 
 @Controller('csvs')
 export class CsvsController {
@@ -11,7 +16,7 @@ export class CsvsController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadCsv(@UploadedFile() file: MulterFile): Promise<void> {
+  async uploadCsv(@UploadedFile() file: Express.Multer.File): Promise<void> {
     await this.csvsService.processCsv(file);
   }
 

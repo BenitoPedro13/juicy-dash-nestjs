@@ -8,39 +8,42 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CsvsService = void 0;
-const csv_parser_1 = __importDefault(require("csv-parser"));
+exports.AttachmentsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const stream_1 = require("stream");
-let CsvsService = exports.CsvsService = class CsvsService {
-    constructor(prisma) {
-        this.prisma = prisma;
+let AttachmentsService = exports.AttachmentsService = class AttachmentsService {
+    constructor(prismaService) {
+        this.prismaService = prismaService;
     }
-    async processCsv(file) {
-        const results = [];
-        const stream = stream_1.Readable.from([file.buffer.toString()]);
-        await new Promise((resolve) => {
-            stream
-                .pipe((0, csv_parser_1.default)())
-                .on('data', (data) => results.push(data))
-                .on('end', () => resolve());
+    async create(createAttachmentDto) {
+        const attachment = await this.prismaService.attachment.create({
+            data: createAttachmentDto,
         });
-        await this.prisma.tabela.deleteMany({});
-        for (const row of results) {
-            await this.prisma.tabela.create({ data: row });
-        }
+        return attachment;
     }
-    async getAllData() {
-        return this.prisma.tabela.findMany();
+    findAll() {
+        return this.prismaService.attachment.findMany();
+    }
+    findOne(id) {
+        return this.prismaService.attachment.findUnique({
+            where: { id },
+        });
+    }
+    update(id, updateAttachmentDto) {
+        return this.prismaService.attachment.update({
+            where: { id },
+            data: updateAttachmentDto,
+        });
+    }
+    remove(id) {
+        return this.prismaService.attachment.delete({
+            where: { id },
+        });
     }
 };
-exports.CsvsService = CsvsService = __decorate([
+exports.AttachmentsService = AttachmentsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
-], CsvsService);
-//# sourceMappingURL=csvs.service.js.map
+], AttachmentsService);
+//# sourceMappingURL=attachments.service.js.map

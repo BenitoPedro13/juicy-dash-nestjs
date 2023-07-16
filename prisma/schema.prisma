@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native"]
 }
 
@@ -11,38 +8,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Category {
-  id Int @id @default(autoincrement())
-  name String
-  Product Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  uniqueFilename String
+  originalFilename String
 }
 
-model Product {
-  id Int @id @default(autoincrement())
-  name String
-  price Float
-  category Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id        Int        @id @default(autoincrement())
+  username  String
+  campaigns Campaign[]
+}
+
+model Campaign {
+  id           Int        @id @default(autoincrement())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  influencer   Influencer @relation(fields: [influencerId], references: [id])
+  influencerId Int
+  metrics      Metric[]
+  User         User?      @relation(fields: [userId], references: [id])
+  userId       Int?
+}
+
+model Influencer {
+  id        Int        @id @default(autoincrement())
+  name      String
+  username  String
+  city      String
+  campaigns Campaign[]
+  metrics   Metric[]
+}
+
+model Metric {
+  id           Int         @id @default(autoincrement())
+  posts        Int
+  impressions  Int
+  interactions Int
+  clicks       Int
+  videoViews   Int
+  cpe          String
+  ctr          String
+  cpc          String
+  cpv          String
+  campaign     Campaign    @relation(fields: [campaignId], references: [id])
+  campaignId   Int
+  Influencer   Influencer? @relation(fields: [influencerId], references: [id])
+  influencerId Int?
 }
 
 model Tabela {
-  id Int @id @default(autoincrement())
-  influencer String
-  username String
-  city String
-  posts String
-  impressions String
+  id           Int      @id @default(autoincrement())
+  influencer   String
+  username     String
+  city         String
+  posts        String
+  impressions  String
   interactions String
-  clicks String
-  videoViews String
-  cpe String
-  ctr String
-  cpc String
-  cpv String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  clicks       String
+  videoViews   String
+  cpe          String
+  ctr          String
+  cpc          String
+  cpv          String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

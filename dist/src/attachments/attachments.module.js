@@ -6,20 +6,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.AttachmentsModule = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
-const prisma_module_1 = require("./prisma/prisma.module");
-const csvs_module_1 = require("./csvs/csvs.module");
-const attachments_module_1 = require("./attachments/attachments.module");
-let AppModule = exports.AppModule = class AppModule {
+const attachments_service_1 = require("./attachments.service");
+const attachments_controller_1 = require("./attachments.controller");
+const platform_express_1 = require("@nestjs/platform-express");
+let AttachmentsModule = exports.AttachmentsModule = class AttachmentsModule {
 };
-exports.AppModule = AppModule = __decorate([
+exports.AttachmentsModule = AttachmentsModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule, csvs_module_1.CsvsModule, attachments_module_1.AttachmentsModule],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        imports: [
+            platform_express_1.MulterModule.register({
+                dest: './uploads',
+            }),
+        ],
+        controllers: [attachments_controller_1.AttachmentsController],
+        providers: [attachments_service_1.AttachmentsService],
     })
-], AppModule);
-//# sourceMappingURL=app.module.js.map
+], AttachmentsModule);
+//# sourceMappingURL=attachments.module.js.map

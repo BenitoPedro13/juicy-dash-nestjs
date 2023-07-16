@@ -37,7 +37,7 @@ async function bootstrap() {
           buffer: context.formValues['Nova Tabela'].buffer,
           originalname: 'file.csv', // você pode extrair o nome original do arquivo do contexto se necessário
         };
-        await csvsService.processCsv(multerFile);
+        await csvsService.processCsv(multerFile as Express.Multer.File);
 
         return resultBuilder.success('Tabela Atualizada', {
           invalidated: ['Tabelas'],
@@ -76,7 +76,6 @@ async function bootstrap() {
   );
   await agent.mountOnNestJs(app).start();
   await app.listen(3000);
-  // await agent.mountOnNestJs(app).start();
 
   logger.verbose('Application started successfully');
 }
