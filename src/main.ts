@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import fs from 'fs';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
@@ -9,7 +10,8 @@ import { CsvsService } from './csvs/csvs.service';
 import { AttachmentsService } from './attachments/attachments.service';
 import { v4 as uuidv4 } from 'uuid';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
+import path, { join } from 'path';
+// import { join } from 'path';
 
 async function bootstrap() {
   const logger = new Logger('App');
@@ -72,11 +74,20 @@ async function bootstrap() {
           fileSize: fileBuffer.length,
         };
 
-        await attachmentService.create(multerFile);
+        // Ensure the /files directory exists
+        const directoryPath = path.join(__dirname, '..', '..', 'files');
+        fs.mkdirSync(directoryPath, { recursive: true });
 
-        return resultBuilder.success('Tabela Attachments Atualizada', {
-          invalidated: ['Attachment'],
+        // Write the file to the /files folder
+        const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+        fs.writeFile(filePath, fileBuffer, (error) => {
+          if (error) {
+            console.error('Error writing file:', error);
+            return resultBuilder.error('Failed to write file.');
+          }
         });
+
+        await attachmentService.create(multerFile);
       },
     }),
   );
@@ -105,7 +116,9 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.useStaticAssets(join(__dirname, '..', '..', 'files'), {
+    prefix: '/public',
+  });
 
   const csvsService = app.get(CsvsService);
   const attachmentService = app.get(AttachmentsService);
