@@ -33,8 +33,6 @@ export class AttachmentsController {
     }),
   )
   async create(@UploadedFile() file: Express.Multer.File) {
-    console.log('file: ', file);
-
     const createdAttachment = await this.attachmentsService.create({
       uniqueFilename: file.filename,
       originalFilename: file.originalname,

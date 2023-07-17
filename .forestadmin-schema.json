@@ -143,7 +143,28 @@
       "segments": []
     },
     {
-      "actions": [],
+      "actions": [
+        {
+          "id": "Attachment-0-upload-file",
+          "name": "Upload File",
+          "type": "global",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/Attachment/0/upload-file",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [
+            {
+              "description": "O Arquivo a ser anexado no dashboard.",
+              "isRequired": true,
+              "field": "Novo Anexo",
+              "type": "File",
+              "defaultValue": null
+            }
+          ],
+          "hooks": {"load": false, "change": ["changeHook"]}
+        }
+      ],
       "fields": [
         {
           "defaultValue": null,

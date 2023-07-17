@@ -6,6 +6,10 @@ import { useContainer } from 'class-validator';
 import { createAgent } from '@forestadmin/agent';
 import { createSqlDataSource } from '@forestadmin/datasource-sql';
 import { CsvsService } from './csvs/csvs.service';
+import { AttachmentsService } from './attachments/attachments.service';
+import { v4 as uuidv4 } from 'uuid';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
   const logger = new Logger('App');
@@ -46,8 +50,43 @@ async function bootstrap() {
     }),
   );
 
-  const app = await NestFactory.create(AppModule, { cors: true });
+  agent.customizeCollection('Attachment', (collection) =>
+    collection.addAction('Upload File', {
+      scope: 'Global',
+      form: [
+        {
+          label: 'Novo Anexo',
+          description: 'O Arquivo a ser anexado no dashboard.',
+          type: 'File',
+          isRequired: true,
+        },
+      ],
+      execute: async (context, resultBuilder) => {
+        const fileBuffer = context.formValues['Novo Anexo'].buffer;
+
+        const multerFile = {
+          uniqueFilename: `${Date.now()}-${uuidv4()}-${
+            context.formValues['Novo Anexo'].name
+          }`,
+          originalFilename: context.formValues['Novo Anexo'].name,
+          fileSize: fileBuffer.length,
+        };
+
+        await attachmentService.create(multerFile);
+
+        return resultBuilder.success('Tabela Attachments Atualizada', {
+          invalidated: ['Attachment'],
+        });
+      },
+    }),
+  );
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+  });
+
   await agent.mountOnNestJs(app).start();
+
   app.enableCors({
     origin: (origin, callback) => {
       const allowedOrigins = [
@@ -66,7 +105,10 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+
   const csvsService = app.get(CsvsService);
+  const attachmentService = app.get(AttachmentsService);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.useGlobalPipes(
