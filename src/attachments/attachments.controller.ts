@@ -40,8 +40,7 @@ export class AttachmentsController {
     });
 
     return {
-      originalFilename: createdAttachment.originalFilename,
-      message: 'File uploaded successfully.',
+      ...createdAttachment,
     };
   }
 
