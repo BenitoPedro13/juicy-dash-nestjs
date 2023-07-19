@@ -147,7 +147,7 @@
         {
           "id": "Attachments-0-upload-file",
           "name": "Upload File",
-          "type": "single",
+          "type": "global",
           "baseUrl": null,
           "endpoint": "/forest/_actions/Attachments/0/upload-file",
           "httpMethod": "POST",

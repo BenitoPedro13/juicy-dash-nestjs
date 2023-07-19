@@ -13,8 +13,12 @@ export class AttachmentsService {
     });
   }
 
-  findAll() {
-    return this.prismaService.attachments.findMany();
+  async findAll(userEmail: string) {
+    return this.prismaService.attachments.findMany({
+      where: {
+        userEmail,
+      },
+    });
   }
 
   findOne(id: number) {

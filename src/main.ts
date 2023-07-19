@@ -72,7 +72,7 @@ async function bootstrap() {
 
   agent.customizeCollection('Attachments', (collection) =>
     collection.addAction('Upload File', {
-      scope: 'Single',
+      scope: 'Global',
       form: [
         {
           label: 'Novo Anexo',

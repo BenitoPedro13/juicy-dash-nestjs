@@ -43,7 +43,13 @@ export class AttachmentsController {
     @Req() req: any, // Inject the Request object using @Req()
   ) {
     // Assign the userId from the request body to the CreateAttachmentDto
+    createAttachmentDto.fileSize = file.size;
     createAttachmentDto.userEmail = req.user.email;
+    createAttachmentDto.originalFilename = file.originalname;
+    (createAttachmentDto.uniqueFilename = `${Date.now()}-${uuidv4()}-${
+      file.originalname
+    }`),
+      console.log('createAttachmentDto', createAttachmentDto);
 
     const createdAttachment = await this.attachmentsService.create(
       createAttachmentDto,
@@ -56,8 +62,9 @@ export class AttachmentsController {
 
   @UseGuards(AuthGuard)
   @Get()
-  async findAll() {
-    return this.attachmentsService.findAll();
+  async findAll(@Req() req: any) {
+    const userEmail = req.user.email;
+    return this.attachmentsService.findAll(userEmail);
   }
 
   @UseGuards(AuthGuard)
