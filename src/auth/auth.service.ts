@@ -43,7 +43,9 @@ export class AuthService {
     try {
       console.log('access_token:', access_token);
 
-      const decoded = await this.jwtService.verifyAsync(access_token);
+      const decoded = await this.jwtService.verifyAsync(access_token, {
+        secret: process.env.JWT_SECRET, // Make sure to use the correct environment variable
+      });
       console.log('decoded:', decoded);
 
       const user = await this.usersService.findOne(decoded.sub);
