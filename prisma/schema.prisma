@@ -8,58 +8,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Attachment {
-  id        Int      @id @default(autoincrement())
-  uniqueFilename String
-  originalFilename String
-  fileSize Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
+// User model
 model User {
-  id        Int        @id @default(autoincrement())
-  username  String
-  campaigns Campaign[]
+  id                          Int           @id @default(autoincrement())
+  email                       String        @unique
+  password                    String
+  name                        String
+  createdAt                   DateTime      @default(now())
+  updatedAt                   DateTime      @updatedAt
+  totalInitialInvestment      Float         @map(name: "total_initial_investment")
+  campaignName                String
+  estimatedExecutedInvestment Float         @map(name: "estimated_executed_investment")
+  attachments                 Attachments[]
+  performances                Performance[]
+  // Attachments   Attachment[]
 }
 
-model Campaign {
-  id           Int        @id @default(autoincrement())
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  influencer   Influencer @relation(fields: [influencerId], references: [id])
-  influencerId Int
-  metrics      Metric[]
-  User         User?      @relation(fields: [userId], references: [id])
-  userId       Int?
+model Performance {
+  id               Int      @id @default(autoincrement())
+  uniqueFilename   String
+  originalFilename String
+  fileSize         Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userEmail], references: [email])
+  userEmail        String
 }
 
-model Influencer {
-  id        Int        @id @default(autoincrement())
-  name      String
-  username  String
-  city      String
-  campaigns Campaign[]
-  metrics   Metric[]
+model Attachments {
+  id               Int      @id @default(autoincrement())
+  uniqueFilename   String
+  originalFilename String
+  fileSize         Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userEmail], references: [email])
+  userEmail        String
 }
 
-model Metric {
-  id           Int         @id @default(autoincrement())
-  posts        Int
-  impressions  Int
-  interactions Int
-  clicks       Int
-  videoViews   Int
-  cpe          String
-  ctr          String
-  cpc          String
-  cpv          String
-  campaign     Campaign    @relation(fields: [campaignId], references: [id])
-  campaignId   Int
-  Influencer   Influencer? @relation(fields: [influencerId], references: [id])
-  influencerId Int?
-}
-
+// Tabela model
 model Tabela {
   id           Int      @id @default(autoincrement())
   influencer   String
