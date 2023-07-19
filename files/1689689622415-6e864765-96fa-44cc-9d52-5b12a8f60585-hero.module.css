@@ -1,0 +1,6 @@
+.underlineBg {
+  background-image: url('/underline.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position-y: bottom;
+}
