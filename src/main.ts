@@ -27,12 +27,12 @@ async function bootstrap() {
     // Create your SQL datasource
     .addDataSource(createSqlDataSource(process.env.DATABASE_URL));
 
-  agent.customizeCollection('Tabela', (collection) =>
+  agent.customizeCollection('Performance', (collection) =>
     collection.addAction('Upload CSV', {
       scope: 'Global',
       form: [
         {
-          label: 'Nova Tabela',
+          label: 'Upload CSV',
           description: 'O Arquivo CSV com os novos dados da tabela.',
           type: 'File',
           isRequired: true,
@@ -40,19 +40,37 @@ async function bootstrap() {
       ],
       execute: async (context, resultBuilder) => {
         const multerFile = {
-          buffer: context.formValues['Nova Tabela'].buffer,
-          originalname: 'file.csv', // você pode extrair o nome original do arquivo do contexto se necessário
+          uniqueFilename: `${Date.now()}-${uuidv4()}-${
+            context.formValues['Upload CSV'].name
+          }`,
+          buffer: context.formValues['Upload CSV'].buffer,
+          originalname: context.formValues['Upload CSV'].name, // você pode extrair o nome original do arquivo do contexto se necessário
+          userEmail: (context.filter.conditionTree as { value: string }).value,
         };
-        await csvsService.processCsv(multerFile as Express.Multer.File);
 
-        return resultBuilder.success('Tabela Atualizada', {
-          invalidated: ['Tabelas'],
+        // Ensure the /files directory exists
+        const directoryPath = path.join(__dirname, '..', '..', 'files');
+        fs.mkdirSync(directoryPath, { recursive: true });
+
+        // Write the file to the /files folder
+        const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+        fs.writeFile(filePath, multerFile.buffer, (error) => {
+          if (error) {
+            console.error('Error writing file:', error);
+            return resultBuilder.error('Failed to write file.');
+          }
         });
+
+        await csvsService.processCsv(multerFile);
+
+        // return resultBuilder.success('Performance Atualizada', {
+        //   invalidated: ['Performance'],
+        // });
       },
     }),
   );
 
-  agent.customizeCollection('Metric', (collection) =>
+  agent.customizeCollection('Attachments', (collection) =>
     collection.addAction('Upload File', {
       scope: 'Single',
       form: [
@@ -60,13 +78,6 @@ async function bootstrap() {
           label: 'Novo Anexo',
           description: 'O Arquivo a ser anexado no dashboard.',
           type: 'File',
-          isRequired: true,
-        },
-        {
-          label: 'User Id',
-          description: 'O Id do Usuario dono do Dashboard',
-          type: 'Collection',
-          collectionName: 'User',
           isRequired: true,
         },
       ],
@@ -78,7 +89,7 @@ async function bootstrap() {
           }`,
           originalFilename: context.formValues['Novo Anexo'].name,
           fileSize: fileBuffer.length,
-          userId: context.formValues['User Id'][0],
+          userEmail: (context.filter.conditionTree as { value: string }).value,
         };
 
         // Ensure the /files directory exists

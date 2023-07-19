@@ -3,7 +3,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { User } from '.prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Campaign } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -21,12 +20,9 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async findOneByEmail(
-    email: string,
-  ): Promise<(User & { campaign: Campaign }) | null> {
+  async findOneByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: { email },
-      include: { campaign: true }, // Include the 'campaign' field in the result
     });
   }
 

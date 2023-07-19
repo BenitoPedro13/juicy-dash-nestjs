@@ -43,7 +43,7 @@ export class AttachmentsController {
     @Req() req: any, // Inject the Request object using @Req()
   ) {
     // Assign the userId from the request body to the CreateAttachmentDto
-    createAttachmentDto.userId = req.user.id;
+    createAttachmentDto.userEmail = req.user.email;
 
     const createdAttachment = await this.attachmentsService.create(
       createAttachmentDto,

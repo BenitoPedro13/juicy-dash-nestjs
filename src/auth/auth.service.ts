@@ -6,7 +6,6 @@ import {
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
-import { Campaign, User } from '@prisma/client';
 
 @Injectable()
 @Dependencies(UsersService, JwtService)
@@ -32,27 +31,23 @@ export class AuthService {
         secret: process.env.JWT_SECRET, // Make sure to use the correct environment variable
       }),
       user: {
-        email: user.email,
         userId: user.id,
+        email: user.email,
         name: user.name,
-        campaign: user.campaign,
+        campaignName: user.campaignName,
+        totalInitialInvestment: user.totalInitialInvestment,
+        estimatedExecutedInvestment: user.estimatedExecutedInvestment,
       },
     };
   }
 
   async getUserByToken(access_token: string) {
     try {
-      console.log('access_token:', access_token);
-
       const decoded = await this.jwtService.verifyAsync(access_token, {
         secret: process.env.JWT_SECRET, // Make sure to use the correct environment variable
       });
-      console.log('decoded:', decoded);
 
-      const user = (await this.usersService.findOne(decoded.sub)) as User & {
-        campaign: Campaign;
-      };
-      console.log('user:', user);
+      const user = await this.usersService.findOne(decoded.sub);
 
       if (!user) {
         console.log('user', user);
@@ -61,10 +56,12 @@ export class AuthService {
 
       return {
         user: {
-          email: user.email,
           userId: user.id,
+          email: user.email,
           name: user.name,
-          campaign: user.campaign,
+          campaignName: user.campaignName,
+          totalInitialInvestment: user.totalInitialInvestment,
+          estimatedExecutedInvestment: user.estimatedExecutedInvestment,
         },
       };
     } catch (error) {

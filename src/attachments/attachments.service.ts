@@ -8,30 +8,30 @@ export class AttachmentsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createAttachmentDto: CreateAttachmentDto) {
-    return this.prismaService.metric.create({
+    return this.prismaService.attachments.create({
       data: createAttachmentDto,
     });
   }
 
   findAll() {
-    return this.prismaService.metric.findMany();
+    return this.prismaService.attachments.findMany();
   }
 
   findOne(id: number) {
-    return this.prismaService.metric.findUnique({
+    return this.prismaService.attachments.findUnique({
       where: { id },
     });
   }
 
   update(id: number, updateAttachmentDto: UpdateAttachmentDto) {
-    return this.prismaService.metric.update({
+    return this.prismaService.attachments.update({
       where: { id },
       data: updateAttachmentDto,
     });
   }
 
   remove(id: number) {
-    return this.prismaService.metric.delete({
+    return this.prismaService.attachments.delete({
       where: { id },
     });
   }

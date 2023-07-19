@@ -5,9 +5,10 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CsvsService } from './csvs.service';
+import { CsvsService, MulterFileDTO } from './csvs.service';
 import { AuthGuard } from '../auth/auth.guard';
 // import { CreateCsvDto } from './dto/create-csv.dto';
 // import { UpdateCsvDto } from './dto/update-csv.dto';
@@ -19,14 +20,16 @@ export class CsvsController {
   @UseGuards(AuthGuard)
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadCsv(@UploadedFile() file: Express.Multer.File): Promise<void> {
+  async uploadCsv(@UploadedFile() file: MulterFileDTO): Promise<void> {
     await this.csvsService.processCsv(file);
   }
 
   @UseGuards(AuthGuard)
   @Get('data')
-  async getAllData(): Promise<any[]> {
-    return this.csvsService.getAllData();
+  async getAllData(@Req() req: any): Promise<any[]> {
+    const userEmail = req.user.email;
+    // console.log('userEmail', userEmail);
+    return this.csvsService.getAllData(userEmail);
   }
 
   // @Post()
