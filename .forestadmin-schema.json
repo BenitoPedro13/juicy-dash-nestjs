@@ -274,7 +274,7 @@
           "enums": null,
           "field": "user",
           "integration": null,
-          "inverseOf": "Attachments",
+          "inverseOf": "Attachment",
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
@@ -300,23 +300,6 @@
     {
       "actions": [],
       "fields": [
-        {
-          "defaultValue": null,
-          "enums": null,
-          "field": "Performances",
-          "integration": null,
-          "inverseOf": "campaign",
-          "isFilterable": false,
-          "isPrimaryKey": false,
-          "isReadOnly": false,
-          "isRequired": false,
-          "isSortable": true,
-          "isVirtual": false,
-          "reference": "Performance.id",
-          "relationship": "HasMany",
-          "type": ["Number"],
-          "validations": []
-        },
         {
           "defaultValue": null,
           "enums": null,
@@ -447,23 +430,6 @@
         {
           "defaultValue": null,
           "enums": null,
-          "field": "campaign",
-          "integration": null,
-          "inverseOf": "Performances",
-          "isFilterable": true,
-          "isPrimaryKey": false,
-          "isReadOnly": false,
-          "isRequired": true,
-          "isSortable": true,
-          "isVirtual": false,
-          "reference": "Campaign.id",
-          "relationship": "BelongsTo",
-          "type": "Number",
-          "validations": [{"type": "is present", "message": "Field is required"}]
-        },
-        {
-          "defaultValue": null,
-          "enums": null,
           "field": "createdAt",
           "integration": null,
           "inverseOf": null,
@@ -566,13 +532,13 @@
           "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
-          "isRequired": false,
+          "isRequired": true,
           "isSortable": true,
           "isVirtual": false,
           "reference": "User.id",
           "relationship": "BelongsTo",
           "type": "Number",
-          "validations": []
+          "validations": [{"type": "is present", "message": "Field is required"}]
         }
       ],
       "icon": null,
@@ -866,18 +832,18 @@
         {
           "defaultValue": null,
           "enums": null,
-          "field": "Attachments",
+          "field": "Attachment",
           "integration": null,
           "inverseOf": "user",
-          "isFilterable": false,
+          "isFilterable": true,
           "isPrimaryKey": false,
           "isReadOnly": false,
           "isRequired": false,
           "isSortable": true,
           "isVirtual": false,
           "reference": "Attachment.id",
-          "relationship": "HasMany",
-          "type": ["Number"],
+          "relationship": "HasOne",
+          "type": "Number",
           "validations": []
         },
         {

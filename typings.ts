@@ -63,6 +63,13 @@ export type Schema = {
       'user:password': string;
       'user:createdAt': string;
       'user:updatedAt': string;
+      'user:Attachment:id': number;
+      'user:Attachment:uniqueFilename': string;
+      'user:Attachment:originalFilename': string;
+      'user:Attachment:fileSize': number;
+      'user:Attachment:userId': number;
+      'user:Attachment:createdAt': string;
+      'user:Attachment:updatedAt': string;
     };
   };
   'Performance': {
@@ -71,35 +78,27 @@ export type Schema = {
       'uniqueFilename': string;
       'originalFilename': string;
       'fileSize': number;
-      'campaignId': number;
       'userId': number;
       'createdAt': string;
       'updatedAt': string;
     };
     nested: {
-      'campaign': Schema['Campaign']['plain'] & Schema['Campaign']['nested'];
       'user': Schema['User']['plain'] & Schema['User']['nested'];
     };
     flat: {
-      'campaign:id': number;
-      'campaign:total_initial_investment': number;
-      'campaign:estimated_executed_investment': number;
-      'campaign:name': string;
-      'campaign:userId': number;
-      'campaign:createdAt': string;
-      'campaign:updatedAt': string;
-      'campaign:user:id': number;
-      'campaign:user:email': string;
-      'campaign:user:name': string;
-      'campaign:user:password': string;
-      'campaign:user:createdAt': string;
-      'campaign:user:updatedAt': string;
       'user:id': number;
       'user:email': string;
       'user:name': string;
       'user:password': string;
       'user:createdAt': string;
       'user:updatedAt': string;
+      'user:Attachment:id': number;
+      'user:Attachment:uniqueFilename': string;
+      'user:Attachment:originalFilename': string;
+      'user:Attachment:fileSize': number;
+      'user:Attachment:userId': number;
+      'user:Attachment:createdAt': string;
+      'user:Attachment:updatedAt': string;
       'user:Campaign:id': number;
       'user:Campaign:total_initial_investment': number;
       'user:Campaign:estimated_executed_investment': number;
@@ -140,9 +139,17 @@ export type Schema = {
       'updatedAt': string;
     };
     nested: {
+      'Attachment': Schema['Attachment']['plain'] & Schema['Attachment']['nested'];
       'Campaign': Schema['Campaign']['plain'] & Schema['Campaign']['nested'];
     };
     flat: {
+      'Attachment:id': number;
+      'Attachment:uniqueFilename': string;
+      'Attachment:originalFilename': string;
+      'Attachment:fileSize': number;
+      'Attachment:userId': number;
+      'Attachment:createdAt': string;
+      'Attachment:updatedAt': string;
       'Campaign:id': number;
       'Campaign:total_initial_investment': number;
       'Campaign:estimated_executed_investment': number;

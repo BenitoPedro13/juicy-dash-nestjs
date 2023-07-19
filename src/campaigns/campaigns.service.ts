@@ -9,7 +9,7 @@ export class CampaignsService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateCampaignDto): Promise<Campaign> {
-    return this.prisma.campaign.create({ data: { ...CreateCampaignDto } });
+    return this.prisma.campaign.create({ data });
   }
 
   async findAll(): Promise<Campaign[]> {

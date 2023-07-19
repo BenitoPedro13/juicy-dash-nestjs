@@ -4,6 +4,7 @@ export class CreateUserDto {
   email: string;
   name: string;
   password: string;
-  // campaign?: Campaign;
-  // performances: Performance[];
+  campaignId?: number;
+  performancesId?: number[];
+  attachmentsId?: number[];
 }

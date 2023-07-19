@@ -4,5 +4,5 @@ export class CreateCampaignDto {
   name: string;
   totalInitialInvestment: number;
   estimatedExecutedInvestment: number;
-  user: number;
+  userId: number;
 }
