@@ -1,7 +1,9 @@
+// import { Campaign, Performance } from '@prisma/client';
+
 export class CreateUserDto {
-  username: string;
   email: string;
-  password: string;
   name: string;
-  campaign: string;
+  password: string;
+  // campaign?: Campaign;
+  // performances: Performance[];
 }

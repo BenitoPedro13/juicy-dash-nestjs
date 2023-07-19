@@ -6,6 +6,7 @@ import {
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
+import { Campaign, User } from '@prisma/client';
 
 @Injectable()
 @Dependencies(UsersService, JwtService)
@@ -48,7 +49,9 @@ export class AuthService {
       });
       console.log('decoded:', decoded);
 
-      const user = await this.usersService.findOne(decoded.sub);
+      const user = (await this.usersService.findOne(decoded.sub)) as User & {
+        campaign: Campaign;
+      };
       console.log('user:', user);
 
       if (!user) {

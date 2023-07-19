@@ -62,16 +62,23 @@ async function bootstrap() {
           type: 'File',
           isRequired: true,
         },
+        {
+          label: 'User Id',
+          description: 'O Id do Usuario dono do Dashboard',
+          type: 'Collection',
+          collectionName: 'User',
+          isRequired: true,
+        },
       ],
       execute: async (context, resultBuilder) => {
         const fileBuffer = context.formValues['Novo Anexo'].buffer;
-
         const multerFile = {
           uniqueFilename: `${Date.now()}-${uuidv4()}-${
             context.formValues['Novo Anexo'].name
           }`,
           originalFilename: context.formValues['Novo Anexo'].name,
           fileSize: fileBuffer.length,
+          userId: context.formValues['User Id'][0],
         };
 
         // Ensure the /files directory exists
