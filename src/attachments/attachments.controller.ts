@@ -8,16 +8,19 @@ import {
   Patch,
   Body,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { AttachmentsService } from './attachments.service';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { AuthGuard } from 'src/auth/auth.guard';
 @Controller('attachments')
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
@@ -44,16 +47,19 @@ export class AttachmentsController {
     };
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   async findAll() {
     return this.attachmentsService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return this.attachmentsService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async update(
     @Param('id') id: number,
@@ -62,6 +68,7 @@ export class AttachmentsController {
     return this.attachmentsService.update(id, updateAttachmentDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: number) {
     return this.attachmentsService.remove(id);

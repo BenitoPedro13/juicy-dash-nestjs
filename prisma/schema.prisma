@@ -18,46 +18,13 @@ model Attachment {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  username  String
-  campaigns Campaign[]
-}
-
-model Campaign {
-  id           Int        @id @default(autoincrement())
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  influencer   Influencer @relation(fields: [influencerId], references: [id])
-  influencerId Int
-  metrics      Metric[]
-  User         User?      @relation(fields: [userId], references: [id])
-  userId       Int?
-}
-
-model Influencer {
-  id        Int        @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
   name      String
-  username  String
-  city      String
-  campaigns Campaign[]
-  metrics   Metric[]
-}
-
-model Metric {
-  id           Int         @id @default(autoincrement())
-  posts        Int
-  impressions  Int
-  interactions Int
-  clicks       Int
-  videoViews   Int
-  cpe          String
-  ctr          String
-  cpc          String
-  cpv          String
-  campaign     Campaign    @relation(fields: [campaignId], references: [id])
-  campaignId   Int
-  Influencer   Influencer? @relation(fields: [influencerId], references: [id])
-  influencerId Int?
+  campaign  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Tabela {

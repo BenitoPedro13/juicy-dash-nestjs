@@ -4,9 +4,11 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CsvsService } from './csvs.service';
+import { AuthGuard } from '../auth/auth.guard';
 // import { CreateCsvDto } from './dto/create-csv.dto';
 // import { UpdateCsvDto } from './dto/update-csv.dto';
 
@@ -14,12 +16,14 @@ import { CsvsService } from './csvs.service';
 export class CsvsController {
   constructor(private readonly csvsService: CsvsService) {}
 
+  @UseGuards(AuthGuard)
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadCsv(@UploadedFile() file: Express.Multer.File): Promise<void> {
     await this.csvsService.processCsv(file);
   }
 
+  @UseGuards(AuthGuard)
   @Get('data')
   async getAllData(): Promise<any[]> {
     return this.csvsService.getAllData();

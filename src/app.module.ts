@@ -7,6 +7,8 @@ import { CsvsModule } from './csvs/csvs.module';
 import { AttachmentsModule } from './attachments/attachments.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { join } from 'path';
       serveRoot: 'public',
       rootPath: join(__dirname, '..', '..', 'files'),
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
