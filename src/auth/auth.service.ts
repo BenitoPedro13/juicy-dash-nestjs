@@ -27,12 +27,14 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id };
 
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload, {
+        secret: process.env.JWT_SECRET, // Make sure to use the correct environment variable
+      }),
       user: {
         email: user.email,
         userId: user.id,
         name: user.name,
-        campaing: user.campaign,
+        campaign: user.campaign,
       },
     };
   }
