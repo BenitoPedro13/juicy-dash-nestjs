@@ -52,9 +52,9 @@ async function bootstrap() {
     }),
   );
 
-  agent.customizeCollection('Attachment', (collection) =>
+  agent.customizeCollection('Metric', (collection) =>
     collection.addAction('Upload File', {
-      scope: 'Global',
+      scope: 'Single',
       form: [
         {
           label: 'Novo Anexo',
