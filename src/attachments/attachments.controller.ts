@@ -32,6 +32,8 @@ export class AttachmentsController {
           const uniqueFilename = `${Date.now()}-${uuidv4()}-${
             file.originalname
           }`;
+
+          req['uniqueFileName'] = uniqueFilename;
           callback(null, uniqueFilename);
         },
       }),
@@ -46,18 +48,9 @@ export class AttachmentsController {
     createAttachmentDto.fileSize = file.size;
     createAttachmentDto.userEmail = req.user.email;
     createAttachmentDto.originalFilename = file.originalname;
-    (createAttachmentDto.uniqueFilename = `${Date.now()}-${uuidv4()}-${
-      file.originalname
-    }`),
-      console.log('createAttachmentDto', createAttachmentDto);
+    createAttachmentDto.uniqueFilename = req['uniqueFileName'];
 
-    const createdAttachment = await this.attachmentsService.create(
-      createAttachmentDto,
-    );
-
-    return {
-      ...createdAttachment,
-    };
+    return await this.attachmentsService.create(createAttachmentDto);
   }
 
   @UseGuards(AuthGuard)

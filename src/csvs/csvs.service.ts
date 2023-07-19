@@ -2,9 +2,9 @@
 import csvParser from 'csv-parser';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Readable } from 'stream';
 import path from 'path';
 import { createReadStream } from 'fs';
+import { Influencer } from './dto/create-csv.dto';
 // import { CreateCsvDto } from './dto/create-csv.dto';
 // import { UpdateCsvDto } from './dto/update-csv.dto';
 
@@ -57,7 +57,10 @@ export class CsvsService {
     // }
   }
 
-  async getAllData(userEmail: string): Promise<any[]> {
+  async getAllData(userEmail: string): Promise<{
+    updatedAt: Date;
+    data: Influencer[];
+  }> {
     const performanceFile = await this.prisma.performance.findFirst({
       where: {
         userEmail: userEmail,
@@ -65,7 +68,10 @@ export class CsvsService {
     });
 
     if (!performanceFile) {
-      return [];
+      return {
+        updatedAt: performanceFile.updatedAt,
+        data: [],
+      };
     }
 
     const filePath = path.join(
@@ -81,13 +87,18 @@ export class CsvsService {
       const results: any[] = [];
       const stream = createReadStream(filePath);
 
-      return new Promise<any[]>((resolve, reject) => {
+      const result = await new Promise<Influencer[]>((resolve, reject) => {
         stream
           .pipe(csvParser())
           .on('data', (data) => results.push(data))
           .on('end', () => resolve(results))
           .on('error', (error) => reject(error));
       });
+      const response = {
+        updatedAt: performanceFile.updatedAt,
+        data: result,
+      };
+      return response;
     } catch (error) {
       console.log('error getAllData: ', error);
     }
