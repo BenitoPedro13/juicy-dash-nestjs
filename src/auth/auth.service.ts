@@ -50,7 +50,6 @@ export class AuthService {
       const user = await this.usersService.findOne(decoded.sub);
 
       if (!user) {
-        console.log('user', user);
         throw new UnauthorizedException();
       }
 
