@@ -1,18 +1,25 @@
 export class CreateCsvDto {}
 export interface Influencer {
   id: number;
-  influencer: string;
-  username: string;
-  city: string;
-  posts: string;
-  impressions: string;
-  interactions: string;
-  clicks: string;
-  videoViews: string;
-  cpe: string;
-  ctr: string;
-  cpc: string;
-  cpv: string;
+  Influencer: string;
+  Username: string;
+  Cidade: string;
+  Posts: string;
+  Stories: string;
+  Feed: string;
+  Tiktok: string;
+  Impressoes: string;
+  Interacoes: string;
+  Cliques: string;
+  'Video Views': string;
+  Engajamento: string;
+  'Engajamento Tiktok': string;
+  'Cliques Tiktok': string;
+  'Impressoes Tiktok': string;
+  CPE: string;
+  CTR: string;
+  CPC: string;
+  CPV: string;
   createdAt: string;
   updatedAt: string;
 }
