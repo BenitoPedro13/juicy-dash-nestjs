@@ -17,6 +17,7 @@ model User {
   createdAt                   DateTime      @default(now())
   updatedAt                   DateTime      @updatedAt
   totalInitialInvestment      Float         @map(name: "total_initial_investment")
+  color                       String?
   campaignName                String
   estimatedExecutedInvestment Float         @map(name: "estimated_executed_investment")
   attachments                 Attachments[]

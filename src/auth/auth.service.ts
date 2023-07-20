@@ -32,6 +32,7 @@ export class AuthService {
       }),
       user: {
         userId: user.id,
+        color: !user.color ? '' : user.color,
         email: user.email,
         name: user.name,
         campaignName: user.campaignName,
@@ -56,6 +57,7 @@ export class AuthService {
       return {
         user: {
           userId: user.id,
+          color: !user.color ? '' : user.color,
           email: user.email,
           name: user.name,
           campaignName: user.campaignName,
