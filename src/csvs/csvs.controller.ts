@@ -32,7 +32,7 @@ export class CsvsController {
     data: Influencer[];
   }> {
     const userEmail = req.user.email;
-    // console.log('userEmail', userEmail);
+
     return this.csvsService.getAllData(userEmail);
   }
 

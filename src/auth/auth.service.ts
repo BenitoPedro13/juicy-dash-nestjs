@@ -32,6 +32,7 @@ export class AuthService {
       }),
       user: {
         userId: user.id,
+        color: !user.color ? '' : user.color,
         email: user.email,
         name: user.name,
         campaignName: user.campaignName,
@@ -50,13 +51,13 @@ export class AuthService {
       const user = await this.usersService.findOne(decoded.sub);
 
       if (!user) {
-        console.log('user', user);
         throw new UnauthorizedException();
       }
 
       return {
         user: {
           userId: user.id,
+          color: !user.color ? '' : user.color,
           email: user.email,
           name: user.name,
           campaignName: user.campaignName,
