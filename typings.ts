@@ -36,6 +36,7 @@ export type Schema = {
       'User:estimated_executed_investment': number;
       'User:total_initial_investment': number;
       'User:color': string;
+      'User:url_profile_picture': string;
       'User:createdAt': string;
       'User:updatedAt': string;
     };
@@ -62,6 +63,7 @@ export type Schema = {
       'User:estimated_executed_investment': number;
       'User:total_initial_investment': number;
       'User:color': string;
+      'User:url_profile_picture': string;
       'User:createdAt': string;
       'User:updatedAt': string;
     };
@@ -76,6 +78,7 @@ export type Schema = {
       'estimated_executed_investment': number;
       'total_initial_investment': number;
       'color': string;
+      'url_profile_picture': string;
       'createdAt': string;
       'updatedAt': string;
     };

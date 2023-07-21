@@ -7,6 +7,8 @@ import { useContainer } from 'class-validator';
 import { createAgent } from '@forestadmin/agent';
 import { createSqlDataSource } from '@forestadmin/datasource-sql';
 import { CsvsService } from './csvs/csvs.service';
+import { UsersService } from './users/users.service';
+
 import { AttachmentsService } from './attachments/attachments.service';
 import { v4 as uuidv4 } from 'uuid';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -63,9 +65,9 @@ async function bootstrap() {
 
         await csvsService.processCsv(multerFile);
 
-        // return resultBuilder.success('Performance Atualizada', {
-        //   invalidated: ['Performance'],
-        // });
+        return resultBuilder.success('Performance Atualizada', {
+          invalidated: ['Performance'],
+        });
       },
     }),
   );
@@ -106,9 +108,74 @@ async function bootstrap() {
         });
 
         await attachmentService.create(multerFile);
+
+        return resultBuilder.success('Attachments Atualizado', {
+          invalidated: ['Attachments'],
+        });
       },
     }),
   );
+
+  agent.customizeCollection('User', (collection) => {
+    return collection.addAction('Upload User Picture', {
+      scope: 'Single',
+      form: [
+        {
+          label: 'Profile Picture',
+          description:
+            'A imagem a ser utilizada como foto de perfil do usuario',
+          type: 'File',
+          isRequired: true,
+        },
+        {
+          label: 'User',
+          description: 'Usuario que recebera a foto',
+          type: 'Collection',
+          collectionName: 'User',
+          isRequired: true,
+        },
+      ],
+      execute: async (context, resultBuilder) => {
+        // formValues: {
+        //   'Profile Picture': {
+        //     mimeType: 'image/jpeg',
+        //     buffer: <Buffer ff d8 ff e0 00 10 4a 46 49 46 00 01 01 00 00 01 00 01 00 00 ff e2 02 a0 49 43 43 5f 50 52 4f 46 49 4c 45 00 01 01 00 00 02 90 6c 63 6d 73 04 30 00 00 ... 21365 more bytes>,
+        //     name: 'perfilBenito.jpg'
+        //   },
+        //   User: [ 12 ]
+        // }
+        const multerFile = {
+          uniqueFilename: `${Date.now()}-${uuidv4()}-${
+            context.formValues['Profile Picture'].name
+          }`,
+          buffer: context.formValues['Profile Picture'].buffer,
+          originalname: context.formValues['Profile Picture'].name, // você pode extrair o nome original do arquivo do contexto se necessário
+          userId: context.formValues.User[0],
+        };
+
+        // Ensure the /files directory exists
+        const directoryPath = path.join(__dirname, '..', '..', 'files');
+        fs.mkdirSync(directoryPath, { recursive: true });
+
+        // Write the file to the /files folder
+        const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+        fs.writeFile(filePath, multerFile.buffer, (error) => {
+          if (error) {
+            console.error('Error writing file:', error);
+            return resultBuilder.error('Failed to write file.');
+          }
+        });
+
+        await usersService.update(context.formValues.User[0], {
+          urlProfilePicture: `/public/${multerFile.uniqueFilename}`,
+        });
+
+        // return resultBuilder.success('Performance Atualizada', {
+        //   invalidated: ['Performance'],
+        // });
+      },
+    });
+  });
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
@@ -140,6 +207,7 @@ async function bootstrap() {
 
   const csvsService = app.get(CsvsService);
   const attachmentService = app.get(AttachmentsService);
+  const usersService = app.get(UsersService);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.useGlobalPipes(

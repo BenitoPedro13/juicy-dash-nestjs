@@ -4,6 +4,7 @@ export class CreateUserDto {
   email: string;
   name: string;
   password: string;
+  urlProfilePicture?: string;
   performancesId?: number[];
   attachmentsId?: number[];
 }
