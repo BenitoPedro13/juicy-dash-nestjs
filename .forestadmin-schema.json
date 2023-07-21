@@ -443,7 +443,7 @@
         {
           "id": "User-0-upload-user-picture",
           "name": "Upload User Picture",
-          "type": "global",
+          "type": "single",
           "baseUrl": null,
           "endpoint": "/forest/_actions/User/0/upload-user-picture",
           "httpMethod": "POST",
