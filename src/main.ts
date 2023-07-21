@@ -27,6 +27,58 @@ async function bootstrap() {
     // Create your SQL datasource
     .addDataSource(createSqlDataSource(process.env.DATABASE_URL));
 
+  agent.customizeCollection('User', (collection) =>
+    collection.addAction('Upload User Picture', {
+      scope: 'Global',
+      form: [
+        {
+          label: 'Profile Picture',
+          description:
+            'A imagem a ser utilizada como foto de perfil do usuario',
+          type: 'File',
+          isRequired: true,
+        },
+        {
+          label: 'User',
+          description: 'Usuario que recebera a foto',
+          type: 'Collection',
+          collectionName: 'User',
+          isRequired: true,
+        },
+      ],
+      execute: async (context, resultBuilder) => {
+        console.log('context', context);
+        // const multerFile = {
+        //   uniqueFilename: `${Date.now()}-${uuidv4()}-${
+        //     context.formValues['Upload CSV'].name
+        //   }`,
+        //   buffer: context.formValues['Upload CSV'].buffer,
+        //   originalname: context.formValues['Upload CSV'].name, // você pode extrair o nome original do arquivo do contexto se necessário
+        //   userEmail: (context.filter.conditionTree as { value: string }).value,
+        // };
+
+        // // Ensure the /files directory exists
+        // const directoryPath = path.join(__dirname, '..', '..', 'files');
+        // fs.mkdirSync(directoryPath, { recursive: true });
+
+        // // Write the file to the /files folder
+        // const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+        // fs.writeFile(filePath, multerFile.buffer, (error) => {
+        //   if (error) {
+        //     console.error('Error writing file:', error);
+        //     return resultBuilder.error('Failed to write file.');
+        //   }
+        // });
+
+        // await csvsService.processCsv(multerFile);
+
+        // return resultBuilder.success('Performance Atualizada', {
+        //   invalidated: ['Performance'],
+        // });
+      },
+    }),
+  );
+
   agent.customizeCollection('Performance', (collection) =>
     collection.addAction('Upload CSV', {
       scope: 'Global',
@@ -63,9 +115,9 @@ async function bootstrap() {
 
         await csvsService.processCsv(multerFile);
 
-        // return resultBuilder.success('Performance Atualizada', {
-        //   invalidated: ['Performance'],
-        // });
+        return resultBuilder.success('Performance Atualizada', {
+          invalidated: ['Performance'],
+        });
       },
     }),
   );
@@ -106,6 +158,10 @@ async function bootstrap() {
         });
 
         await attachmentService.create(multerFile);
+
+        return resultBuilder.success('Attachments Atualizado', {
+          invalidated: ['Attachments'],
+        });
       },
     }),
   );
