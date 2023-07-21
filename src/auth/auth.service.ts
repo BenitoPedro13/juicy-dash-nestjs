@@ -33,6 +33,9 @@ export class AuthService {
       user: {
         userId: user.id,
         color: !user.color ? '' : user.color,
+        urlProfilePicture: !user.urlProfilePicture
+          ? ''
+          : user.urlProfilePicture,
         email: user.email,
         name: user.name,
         campaignName: user.campaignName,

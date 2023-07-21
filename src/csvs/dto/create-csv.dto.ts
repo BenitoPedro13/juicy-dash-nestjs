@@ -16,6 +16,7 @@ export interface Influencer {
   'Engajamento Tiktok': string;
   'Cliques Tiktok': string;
   'Impressoes Tiktok': string;
+  'Url Foto Perfil': string;
   CPE: string;
   CTR: string;
   CPC: string;
