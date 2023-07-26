@@ -4,6 +4,7 @@ export interface Influencer {
   Influencer: string;
   Username: string;
   Cidade: string;
+  Investimento: string;
   Posts: string;
   Stories: string;
   Feed: string;
