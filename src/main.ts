@@ -186,6 +186,7 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       const allowedOrigins = [
+        /\.juicy\.space$/,
         /\.forestadmin\.com$/,
         /\.vercel\.app$/,
         /^http:\/\/localhost:\d{4}/,
