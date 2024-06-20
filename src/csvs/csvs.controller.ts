@@ -21,8 +21,12 @@ export class CsvsController {
   @UseGuards(AuthGuard)
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadCsv(@UploadedFile() file: MulterFileDTO): Promise<void> {
-    await this.csvsService.processCsv(file);
+  async uploadCsv(
+    @Req() req: { user: { email: string } },
+    @UploadedFile() file: MulterFileDTO,
+  ): Promise<void> {
+    console.log('CsvsController.uploadCsv: ', req.user);
+    await this.csvsService.processCsv(file, req.user.email);
   }
 
   @UseGuards(AuthGuard)
