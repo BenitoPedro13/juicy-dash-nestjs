@@ -5,7 +5,7 @@
       "fields": [
         {
           "defaultValue": 0,
-          "enums": [],
+          "enums": null,
           "field": "applied_steps_count",
           "integration": null,
           "inverseOf": null,
@@ -21,7 +21,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "checksum",
           "integration": null,
           "inverseOf": null,
@@ -37,7 +37,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "finished_at",
           "integration": null,
           "inverseOf": null,
@@ -53,7 +53,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "id",
           "integration": null,
           "inverseOf": null,
@@ -69,7 +69,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "logs",
           "integration": null,
           "inverseOf": null,
@@ -85,7 +85,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "migration_name",
           "integration": null,
           "inverseOf": null,
@@ -101,7 +101,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "rolled_back_at",
           "integration": null,
           "inverseOf": null,
@@ -117,7 +117,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "started_at",
           "integration": null,
           "inverseOf": null,
@@ -185,7 +185,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "createdAt",
           "integration": null,
           "inverseOf": null,
@@ -201,7 +201,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "fileSize",
           "integration": null,
           "inverseOf": null,
@@ -217,7 +217,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "id",
           "integration": null,
           "inverseOf": null,
@@ -233,7 +233,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "originalFilename",
           "integration": null,
           "inverseOf": null,
@@ -249,7 +249,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "uniqueFilename",
           "integration": null,
           "inverseOf": null,
@@ -265,7 +265,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "updatedAt",
           "integration": null,
           "inverseOf": null,
@@ -333,7 +333,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "createdAt",
           "integration": null,
           "inverseOf": null,
@@ -349,7 +349,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "fileSize",
           "integration": null,
           "inverseOf": null,
@@ -365,7 +365,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "id",
           "integration": null,
           "inverseOf": null,
@@ -381,7 +381,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "originalFilename",
           "integration": null,
           "inverseOf": null,
@@ -397,7 +397,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "uniqueFilename",
           "integration": null,
           "inverseOf": null,
@@ -413,7 +413,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "updatedAt",
           "integration": null,
           "inverseOf": null,
@@ -505,7 +505,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "campaignName",
           "integration": null,
           "inverseOf": null,
@@ -521,7 +521,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "color",
           "integration": null,
           "inverseOf": null,
@@ -537,7 +537,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "createdAt",
           "integration": null,
           "inverseOf": null,
@@ -553,7 +553,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "email",
           "integration": null,
           "inverseOf": null,
@@ -569,7 +569,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "estimated_executed_investment",
           "integration": null,
           "inverseOf": null,
@@ -585,7 +585,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "id",
           "integration": null,
           "inverseOf": null,
@@ -601,7 +601,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "name",
           "integration": null,
           "inverseOf": null,
@@ -617,7 +617,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "password",
           "integration": null,
           "inverseOf": null,
@@ -633,7 +633,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "total_initial_investment",
           "integration": null,
           "inverseOf": null,
@@ -649,7 +649,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "updatedAt",
           "integration": null,
           "inverseOf": null,
@@ -665,7 +665,7 @@
         },
         {
           "defaultValue": null,
-          "enums": [],
+          "enums": null,
           "field": "url_profile_picture",
           "integration": null,
           "inverseOf": null,
@@ -691,10 +691,10 @@
       "segments": []
     }
   ],
-  "meta": {
+  "metadata": {
     "liana": "forest-nodejs-agent",
-    "liana_version": "1.38.7",
+    "liana_version": "1.13.4",
     "liana_features": null,
-    "stack": {"engine": "nodejs", "engine_version": "21.6.2"}
+    "stack": {"engine": "nodejs", "engine_version": "18.16.1"}
   }
 }
