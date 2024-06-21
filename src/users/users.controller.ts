@@ -29,6 +29,7 @@ export class UsersController {
     @Query('_end') end?: string,
     @Query('_sort') sort?: string,
     @Query('_order') order?: string,
+    @Query('name') nameFilterValue?: string,
   ) {
     const sortFields = (
       sort?.includes(',') ? sort?.split(',') : [sort]
@@ -42,6 +43,7 @@ export class UsersController {
       end: end ? +end : 10,
       sort: sort ? sortFields : ['id'],
       order: order ? sortOrders : ['asc'],
+      name: nameFilterValue ? nameFilterValue : null,
     });
   }
 
