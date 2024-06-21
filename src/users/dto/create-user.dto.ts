@@ -4,7 +4,9 @@ export class CreateUserDto {
   email: string;
   name: string;
   password: string;
+  totalInitialInvestment: number;
+  estimatedExecutedInvestment: number;
+  campaignName: string;
+  color?: string;
   urlProfilePicture?: string;
-  performancesId?: number[];
-  attachmentsId?: number[];
 }

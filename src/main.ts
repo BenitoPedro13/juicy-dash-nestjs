@@ -29,49 +29,6 @@ async function bootstrap() {
     // Create your SQL datasource
     .addDataSource(createSqlDataSource(process.env.DATABASE_URL));
 
-  agent.customizeCollection('Performance', (collection) =>
-    collection.addAction('Upload CSV', {
-      scope: 'Global',
-      form: [
-        {
-          label: 'Upload CSV',
-          description: 'O Arquivo CSV com os novos dados da tabela.',
-          type: 'File',
-          isRequired: true,
-        },
-      ],
-      execute: async (context, resultBuilder) => {
-        const multerFile = {
-          uniqueFilename: `${Date.now()}-${uuidv4()}-${
-            context.formValues['Upload CSV'].name
-          }`,
-          buffer: context.formValues['Upload CSV'].buffer,
-          originalname: context.formValues['Upload CSV'].name, // você pode extrair o nome original do arquivo do contexto se necessário
-          userEmail: (context.filter.conditionTree as { value: string }).value,
-        };
-
-        // Ensure the /files directory exists
-        const directoryPath = path.join(__dirname, '..', '..', 'files');
-        fs.mkdirSync(directoryPath, { recursive: true });
-
-        // Write the file to the /files folder
-        const filePath = path.join(directoryPath, multerFile.uniqueFilename);
-        fs.writeFile(filePath, multerFile.buffer, (error) => {
-          if (error) {
-            console.error('Error writing file:', error);
-            return resultBuilder.error('Failed to write file.');
-          }
-        });
-
-        await csvsService.processCsv(multerFile);
-
-        return resultBuilder.success('Performance Atualizada', {
-          invalidated: ['Performance'],
-        });
-      },
-    }),
-  );
-
   agent.customizeCollection('Attachments', (collection) =>
     collection.addAction('Upload File', {
       scope: 'Global',

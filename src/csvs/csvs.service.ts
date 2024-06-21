@@ -1,13 +1,13 @@
-// import fs from 'fs';
 import csvParser from 'csv-parser';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import path from 'path';
 import { createReadStream } from 'fs';
 import { Influencer } from './dto/create-csv.dto';
-// import { CreateCsvDto } from './dto/create-csv.dto';
-// import { UpdateCsvDto } from './dto/update-csv.dto';
 
+import 'dotenv/config';
+import fs from 'fs';
+
+import path from 'path';
 export type MulterFileDTO = {
   uniqueFilename: string;
   buffer: Buffer;
@@ -19,20 +19,30 @@ export type MulterFileDTO = {
 export class CsvsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async processCsv(file: MulterFileDTO): Promise<void> {
-    // const results = [];
-    // const stream = Readable.from([file.buffer.toString()]); // Convert buffer to string
+  async processCsv(file: MulterFileDTO, userEmail: string): Promise<void> {
+    const multerFile = {
+      uniqueFilename: `${Date.now()}-${file?.originalname ?? ''}`,
+      buffer: file.buffer,
+      originalname: file.originalname,
+      userEmail: userEmail,
+    };
 
-    // await new Promise<void>((resolve) => {
-    //   stream
-    //     .pipe(csvParser())
-    //     .on('data', (data) => results.push(data))
-    //     .on('end', () => resolve());
-    // });
+    // Ensure the /files directory exists
+    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
+    fs.mkdirSync(directoryPath, { recursive: true });
+
+    // Write the file to the /files folder
+    const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+
+    fs.writeFile(filePath, multerFile.buffer, (error) => {
+      if (error) {
+        console.error('Error writing file:', error);
+      }
+    });
 
     await this.prisma.performance.deleteMany({
       where: {
-        userEmail: file.userEmail,
+        userEmail,
       },
     });
 
@@ -45,16 +55,14 @@ export class CsvsService {
     // user             User     @relation(fields: [userEmail], references: [email])
     // userEmail        String
 
-    // for (const row of results) {
     await this.prisma.performance.create({
       data: {
-        uniqueFilename: file.uniqueFilename,
+        uniqueFilename: multerFile.uniqueFilename,
         originalFilename: file.originalname,
         fileSize: file.buffer.length,
-        userEmail: file.userEmail,
+        userEmail: userEmail,
       },
     });
-    // }
   }
 
   async getAllData(userEmail: string): Promise<{
@@ -123,4 +131,7 @@ export class CsvsService {
   // remove(id: number) {
   //   return `This action removes a #${id} csv`;
   // }
+}
+function uuidv4() {
+  throw new Error('Function not implemented.');
 }
