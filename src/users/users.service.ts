@@ -4,6 +4,8 @@ import { User } from '.prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { sortFields, sortOrder } from 'types/queyParams';
+import { Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class UsersService {
@@ -18,16 +20,15 @@ export class UsersService {
     end,
     sort,
     order,
+    name,
   }: {
     start: number;
     end: number;
     sort: sortFields<User>;
     order: sortOrder;
+    name: string | null;
   }): Promise<User[]> {
     try {
-      console.log('sort :', sort);
-      console.log('order :', order);
-
       const orderBy = sort.map((item, index) => {
         return {
           [item]: order[index],
@@ -36,11 +37,26 @@ export class UsersService {
 
       const pageSize = end - start;
 
-      return this.prisma.user.findMany({
+      const where: Prisma.UserWhereInput = name
+        ? {
+            name: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          }
+        : undefined;
+
+      const findManyPayload: Prisma.UserFindManyArgs<DefaultArgs> = {
         take: pageSize,
         skip: start,
         orderBy: orderBy,
-      });
+      };
+
+      if (where !== undefined) {
+        findManyPayload.where = where;
+      }
+
+      return this.prisma.user.findMany(findManyPayload);
     } catch (error) {
       console.log(error);
     }
