@@ -1,4 +1,12 @@
-export class CreateCsvDto {}
+export class CreateCsvDto {
+  // id: number;
+  uniqueFilename: string;
+  originalFilename: string;
+  fileSize: number;
+  // createdAt: Date;
+  // updatedAt: Date;
+  userEmail: string;
+}
 export interface Influencer {
   id: number;
   Influencer: string;

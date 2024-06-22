@@ -24,7 +24,7 @@ export class UsersController {
   }
 
   @Get()
-  findAll(
+  async findAll(
     @Query('_start') start?: string,
     @Query('_end') end?: string,
     @Query('_sort') sort?: string,
@@ -38,7 +38,7 @@ export class UsersController {
       order?.includes(',') ? order?.split(',') : [order]
     ) as sortOrder;
 
-    return this.usersService.findAll({
+    return await this.usersService.findAll({
       start: start ? +start : 0,
       end: end ? +end : 10,
       sort: sort ? sortFields : ['id'],

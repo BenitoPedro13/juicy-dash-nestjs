@@ -8,6 +8,10 @@ import 'dotenv/config';
 import fs from 'fs';
 
 import path from 'path';
+import { sortFields, sortOrder } from 'types/queyParams';
+import { Performance, Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
+import { UpdateCsvDto } from './dto/update-csv.dto';
 export type MulterFileDTO = {
   uniqueFilename: string;
   buffer: Buffer;
@@ -116,22 +120,63 @@ export class CsvsService {
   //   return 'This action adds a new csv';
   // }
 
-  // findAll() {
-  //   return `This action returns all csvs`;
-  // }
+  findAll({
+    start,
+    end,
+    sort,
+    order,
+  }: // name,
+  {
+    start: number;
+    end: number;
+    sort: sortFields<Performance>;
+    order: sortOrder;
+    // name: string | null;
+  }) {
+    try {
+      const orderBy = sort.map((item, index) => {
+        return {
+          [item]: order[index],
+        };
+      });
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} csv`;
-  // }
+      const pageSize = end - start;
+
+      const findManyPayload: Prisma.PerformanceFindManyArgs<DefaultArgs> = {
+        take: pageSize,
+        skip: start,
+        orderBy: orderBy,
+      };
+
+      return this.prisma.performance.findMany(findManyPayload);
+    } catch (error) {
+      console.log('CsvsService.findAll: ', error);
+    }
+  }
+
+  findOne(id: number) {
+    try {
+      return this.prisma.performance.findUnique({ where: { id } });
+    } catch (error) {
+      console.log('CsvsService.findOne: ', error);
+    }
+  }
 
   // update(id: number, updateCsvDto: UpdateCsvDto) {
   //   return `This action updates a #${id} csv`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} csv`;
-  // }
-}
-function uuidv4() {
-  throw new Error('Function not implemented.');
+  async update(
+    id: number,
+    updateCsvDto: UpdateCsvDto,
+  ): Promise<Performance | null> {
+    return this.prisma.performance.update({
+      where: { id },
+      data: updateCsvDto as any,
+    });
+  }
+
+  async remove(id: number): Promise<Performance | null> {
+    return this.prisma.performance.delete({ where: { id } });
+  }
 }

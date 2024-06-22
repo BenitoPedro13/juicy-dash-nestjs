@@ -27,7 +27,7 @@ export class UsersService {
     sort: sortFields<User>;
     order: sortOrder;
     name: string | null;
-  }): Promise<User[]> {
+  }) {
     try {
       const orderBy = sort.map((item, index) => {
         return {
@@ -50,20 +50,29 @@ export class UsersService {
         take: pageSize,
         skip: start,
         orderBy: orderBy,
+        include: { performances: true },
       };
 
       if (where !== undefined) {
         findManyPayload.where = where;
       }
 
-      return this.prisma.user.findMany(findManyPayload);
+      const result = await this.prisma.user.findMany(findManyPayload);
+
+      return {
+        result,
+        total:
+          where !== undefined
+            ? await this.prisma.user.count({ where })
+            : await this.prisma.user.count(),
+      };
     } catch (error) {
       console.log(error);
     }
   }
 
   async findOne(id: number): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: { id } });
+    return await this.prisma.user.findUnique({ where: { id } });
   }
 
   async findOneByEmail(email: string): Promise<User | null> {
@@ -73,13 +82,13 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User | null> {
-    return this.prisma.user.update({
+    return await this.prisma.user.update({
       where: { id },
       data: updateUserDto as any,
     });
   }
 
   async remove(id: number): Promise<User | null> {
-    return this.prisma.user.delete({ where: { id } });
+    return await this.prisma.user.delete({ where: { id } });
   }
 }
