@@ -27,13 +27,22 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Post('upload')
+  @Post('upload-profile-image')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadCsv(
+  async uploadProfileImage(
     @Body() body: { user_email: string },
     @UploadedFile() file: MulterFileDTO,
   ): Promise<void> {
     await this.usersService.processProfileImage(file, body.user_email);
+  }
+
+  @Post('upload-attachment')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAttachment(
+    @Body() body: { user_email: string },
+    @UploadedFile() file: MulterFileDTO,
+  ): Promise<void> {
+    await this.usersService.processAttachment(file, body.user_email);
   }
 
   @Get()
