@@ -10,6 +10,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -18,6 +19,9 @@ import { UpdateAttachmentDto } from './dto/update-attachment.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateAttachmentDto } from './dto/create-attachment.dto';
+import { Attachments } from '@prisma/client';
+import { sortFields, sortOrder } from 'types/queyParams';
+
 @Controller('attachments')
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) {}
@@ -58,6 +62,30 @@ export class AttachmentsController {
   async findAll(@Req() req: any) {
     const userEmail = req.user.email;
     return this.attachmentsService.findAll(userEmail);
+  }
+
+  @Get('all')
+  async findAllWithoutAuth(
+    @Query('email') email?: string,
+    @Query('_start') start?: string,
+    @Query('_end') end?: string,
+    @Query('_sort') sort?: string,
+    @Query('_order') order?: string,
+  ) {
+    const sortFields = (
+      sort?.includes(',') ? sort?.split(',') : [sort]
+    ) as sortFields<Attachments>;
+    const sortOrders = (
+      order?.includes(',') ? order?.split(',') : [order]
+    ) as sortOrder;
+
+    return await this.attachmentsService.findAllWithoutAuth({
+      start: start ? +start : 0,
+      end: end ? +end : 10,
+      sort: sort ? sortFields : ['id'],
+      order: order ? sortOrders : ['asc'],
+      userEmail: email,
+    });
   }
 
   @UseGuards(AuthGuard)
