@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAttachmentDto } from './dto/create-attachment.dto';
 import { UpdateAttachmentDto } from './dto/update-attachment.dto';
-
+import { sortFields, sortOrder } from 'types/queyParams';
+import { Attachments } from '@prisma/client';
+import { MulterFileDTO } from 'src/csvs/csvs.service';
+import path from 'path';
+import fs from 'fs';
 @Injectable()
 export class AttachmentsService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -19,6 +23,113 @@ export class AttachmentsService {
         userEmail,
       },
     });
+  }
+
+  async processAttachment(
+    file: Express.Multer.File,
+    userEmail: string,
+  ): Promise<void> {
+    try {
+      const multerFile = {
+        uniqueFilename: `${Date.now()}-${file?.originalname ?? ''}`,
+        buffer: file.buffer,
+        originalname: file.originalname,
+        userEmail: userEmail,
+      };
+
+      console.log(multerFile);
+
+      // Ensure the /files directory exists
+      const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
+      fs.mkdirSync(directoryPath, { recursive: true });
+
+      // Write the file to the /files folder
+      const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+
+      fs.writeFile(filePath, multerFile.buffer, (error) => {
+        if (error) {
+          console.error('Error writing file:', error);
+        }
+      });
+
+      // await this.prismaService.attachments.deleteMany({
+      //   where: {
+      //     uniqueFilename: {
+      //       contains: userEmail,
+      //     },
+      //     userEmail,
+      //   },
+      // });
+
+      // id               Int      @id @default(autoincrement())
+      // uniqueFilename   String
+      // originalFilename String
+      // fileSize         Int
+      // createdAt        DateTime @default(now())
+      // updatedAt        DateTime @updatedAt
+      // user             User     @relation(fields: [userEmail], references: [email])
+      // userEmail        String
+
+      await this.prismaService.attachments.create({
+        data: {
+          uniqueFilename: multerFile.uniqueFilename,
+          originalFilename: file.originalname,
+          fileSize: file.buffer.length,
+          userEmail: userEmail,
+        },
+      });
+
+      // await this.prismaService.user.update({
+      //   data: {
+      //     urlProfilePicture: `/public/${multerFile.uniqueFilename}`,
+      //   },
+      //   where: { email: userEmail },
+      // });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async findAllWithoutAuth({
+    start,
+    end,
+    sort,
+    order,
+    // name,
+    userEmail,
+  }: {
+    start: number;
+    end: number;
+    sort: sortFields<Attachments>;
+    order: sortOrder;
+    // name: string | null;
+    userEmail: string;
+  }) {
+    const orderBy = sort.map((item, index) => {
+      return {
+        [item]: order[index],
+      };
+    });
+
+    const pageSize = end - start;
+
+    const result = await this.prismaService.attachments.findMany({
+      take: pageSize,
+      skip: start,
+      orderBy: orderBy,
+      where: {
+        userEmail,
+      },
+    });
+
+    return {
+      result,
+      total: await this.prismaService.attachments.count({
+        where: {
+          userEmail,
+        },
+      }),
+    };
   }
 
   findOne(id: number) {
