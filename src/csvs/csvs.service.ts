@@ -120,7 +120,7 @@ export class CsvsService {
   //   return 'This action adds a new csv';
   // }
 
-  findAll({
+  async findAll({
     start,
     end,
     sort,
@@ -148,7 +148,12 @@ export class CsvsService {
         orderBy: orderBy,
       };
 
-      return this.prisma.performance.findMany(findManyPayload);
+      const result = await this.prisma.performance.findMany(findManyPayload);
+
+      return {
+        result,
+        total: await this.prisma.performance.count(),
+      };
     } catch (error) {
       console.log('CsvsService.findAll: ', error);
     }

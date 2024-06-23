@@ -52,7 +52,7 @@ export class CsvsController {
   // }
 
   @Get()
-  findAll(
+  async findAll(
     @Query('_start') start?: string,
     @Query('_end') end?: string,
     @Query('_sort') sort?: string,
@@ -66,7 +66,7 @@ export class CsvsController {
       order?.includes(',') ? order?.split(',') : [order]
     ) as sortOrder;
 
-    return this.csvsService.findAll({
+    return await this.csvsService.findAll({
       start: start ? +start : 0,
       end: end ? +end : 10,
       sort: sort ? sortFields : ['id'],
@@ -80,13 +80,13 @@ export class CsvsController {
     return this.csvsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCsvDto: UpdateCsvDto) {
-    return this.csvsService.update(+id, updateCsvDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateCsvDto: UpdateCsvDto) {
+  //   return this.csvsService.update(+id, updateCsvDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.csvsService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.csvsService.remove(+id);
+  // }
 }
