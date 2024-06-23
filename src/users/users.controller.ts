@@ -7,12 +7,16 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@prisma/client';
 import { sortFields, sortOrder } from 'types/queyParams';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterFileDTO } from 'src/csvs/csvs.service';
 
 @Controller('users')
 export class UsersController {
@@ -21,6 +25,15 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadCsv(
+    @Body() body: { user_email: string },
+    @UploadedFile() file: MulterFileDTO,
+  ): Promise<void> {
+    await this.usersService.processProfileImage(file, body.user_email);
   }
 
   @Get()
