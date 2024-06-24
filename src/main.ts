@@ -173,7 +173,7 @@ async function bootstrap() {
       errorHttpStatusCode: 422,
     }),
   );
-  await app.listen(3001);
+  await app.listen(3000);
   logger.verbose('Application started successfully');
 }
 
