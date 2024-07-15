@@ -14,7 +14,9 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto): Promise<User | null> {
-    return this.prisma.user.create({ data: createUserDto as any });
+    return this.prisma.user.create({
+      data: createUserDto as Prisma.UserCreateInput,
+    });
   }
 
   async processProfileImage(
@@ -209,7 +211,7 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User | null> {
     return await this.prisma.user.update({
       where: { id },
-      data: updateUserDto as any,
+      data: updateUserDto as Prisma.PostsUpdateInput,
     });
   }
 

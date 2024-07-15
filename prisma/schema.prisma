@@ -41,6 +41,8 @@ model User {
 //   estimatedExecutedInvestment Float         @map(name: "estimated_executed_investment")
 //   attachments                 Attachments[]
 //   performances                Performance[]
+//   influencers                 Influencers[]
+//   Posts                       Posts[]
 // }
 
 model Performance {
@@ -70,11 +72,12 @@ model Attachments {
   // campaignId       Int?
 }
 
-model Influencers {
-  id        Int     @id @default(autoincrement())
-  creatorId String  @unique
-  Posts     Posts[]
-}
+// model Influencers {
+//   id          Int     @id @default(autoincrement())
+//   creatorId   String  @unique
+//   creatorName String
+//   Posts       Posts[]
+// }
 
 model Posts {
   id            Int         @id @default(autoincrement())
@@ -87,8 +90,9 @@ model Posts {
   engagement    Float
   price         Float
   postDate      DateTime
-  influencerId  Int
-  influencer    Influencers @relation(fields: [influencerId], references: [id])
+  creatorId     String
+  // influencersId Int?
+  // influencer    Influencers @relation(fields: [influencerId], references: [id])
   performanceId Int
   performance   Performance @relation(fields: [performanceId], references: [id])
   createdAt     DateTime    @default(now())
