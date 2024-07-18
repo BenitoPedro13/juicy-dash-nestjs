@@ -12,6 +12,7 @@ import { sortFields, sortOrder } from 'types/queyParams';
 import { Performance, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { UpdateCsvDto } from './dto/update-csv.dto';
+import { getFilePath, getFilesFolderPath } from 'utils';
 export type MulterFileDTO = {
   uniqueFilename: string;
   buffer: Buffer;
@@ -32,7 +33,8 @@ export class CsvsService {
     };
 
     // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
+    const directoryPath = getFilesFolderPath(__dirname);
+
     fs.mkdirSync(directoryPath, { recursive: true });
 
     // Write the file to the /files folder
@@ -42,6 +44,14 @@ export class CsvsService {
       if (error) {
         console.error('Error writing file:', error);
       }
+    });
+
+    await this.prisma.posts.deleteMany({
+      where: {
+        performance: {
+          userEmail,
+        },
+      },
     });
 
     await this.prisma.performance.deleteMany({
@@ -86,14 +96,7 @@ export class CsvsService {
       };
     }
 
-    const filePath = path.join(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      'files',
-      performanceFile.uniqueFilename,
-    );
+    const filePath = getFilePath(__dirname, performanceFile.uniqueFilename);
 
     try {
       const results: any[] = [];

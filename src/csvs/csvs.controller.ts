@@ -85,8 +85,8 @@ export class CsvsController {
   //   return this.csvsService.update(+id, updateCsvDto);
   // }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.csvsService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.csvsService.remove(+id);
+  }
 }
