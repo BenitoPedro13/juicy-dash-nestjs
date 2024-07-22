@@ -46,14 +46,6 @@ export class CsvsService {
       }
     });
 
-    await this.prisma.posts.deleteMany({
-      where: {
-        performance: {
-          userEmail,
-        },
-      },
-    });
-
     await this.prisma.performance.deleteMany({
       where: {
         userEmail,

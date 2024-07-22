@@ -90,22 +90,22 @@ export class AttachmentsController {
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  async findOne(@Param('id') id: number) {
-    return this.attachmentsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return this.attachmentsService.findOne(+id);
   }
 
   @UseGuards(AuthGuard)
   @Patch(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() updateAttachmentDto: UpdateAttachmentDto,
   ) {
-    return this.attachmentsService.update(id, updateAttachmentDto);
+    return this.attachmentsService.update(+id, updateAttachmentDto);
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Delete(':id')
-  async remove(@Param('id') id: number) {
-    return this.attachmentsService.remove(id);
+  async remove(@Param('id') id: string) {
+    return this.attachmentsService.remove(+id);
   }
 }

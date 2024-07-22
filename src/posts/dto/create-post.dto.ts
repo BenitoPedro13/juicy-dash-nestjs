@@ -2,6 +2,7 @@ import {
   //  Influencers,
   Performance,
   PostsType,
+  User,
 } from '@prisma/client';
 
 export class CreatePostDto {
@@ -15,8 +16,12 @@ export class CreatePostDto {
   price: number;
   postDate: string;
   creatorId: string;
+  creatorName: string;
   // influencerId?: string;
   // influencer?: Influencers;
-  performanceId?: number;
-  performance?: Performance;
+  // performanceId?: number;
+  // performance?: Performance;
+
+  userEmail?: string;
+  user?: User;
 }

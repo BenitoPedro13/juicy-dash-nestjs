@@ -42,43 +42,73 @@ export class PostsService {
 
       const pageSize = end - start;
 
-      // const where: Prisma.PostsWhereInput = name
-      //   ? {
-      //       influencer: {
-      //         creatorName: {
-      //           contains: name,
-      //           mode: 'insensitive',
-      //         },
-      //       },
-      //     }
-      //   : undefined;
-
       const findManyPayload: Prisma.PostsFindManyArgs<DefaultArgs> = {
         take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: {
-          performance: true,
-          //  influencer: true
+          user: true,
         },
       };
-
-      // if (where !== undefined) {
-      //   findManyPayload.where = where;
-      // }
 
       const result = await this.prisma.posts.findMany(findManyPayload);
 
       return {
         result,
-        total:
-          // where !== undefined
-          //   ? await this.prisma.posts.count({ where }):
-          await this.prisma.posts.count(),
+        total: await this.prisma.posts.count(),
       };
     } catch (error) {
       console.log('PostsService.findAll: ', error);
     }
+  }
+
+  async findAllByUser({
+    start,
+    end,
+    sort,
+    order,
+    // name,
+    userEmail,
+  }: {
+    start: number;
+    end: number;
+    sort: sortFields<Posts>;
+    order: sortOrder;
+    // name: string | null;
+    userEmail: string;
+  }) {
+    const orderBy = sort.map((item, index) => {
+      return {
+        [item]: order[index],
+      };
+    });
+
+    const pageSize = end - start;
+
+    const result = await this.prisma.posts.findMany({
+      take: pageSize,
+      skip: start,
+      orderBy: orderBy,
+      where: {
+        user: {
+          email: userEmail,
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return {
+      result,
+      total: await this.prisma.posts.count({
+        where: {
+          user: {
+            email: userEmail,
+          },
+        },
+      }),
+    };
   }
 
   async findOne(id: number): Promise<Posts | null> {
@@ -86,8 +116,7 @@ export class PostsService {
       return await this.prisma.posts.findUnique({
         where: { id },
         include: {
-          performance: true,
-          //  influencer: true
+          user: true,
         },
       });
     } catch (error) {
