@@ -30,6 +30,6 @@ export interface Influencer {
   CTR: string;
   CPC: string;
   CPV: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

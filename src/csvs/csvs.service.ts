@@ -13,6 +13,7 @@ import { Performance, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { UpdateCsvDto } from './dto/update-csv.dto';
 import { getFilePath, getFilesFolderPath } from 'utils';
+import { CreatorService } from '../../externDB/services/CreatorService';
 export type MulterFileDTO = {
   uniqueFilename: string;
   buffer: Buffer;
@@ -22,7 +23,10 @@ export type MulterFileDTO = {
 
 @Injectable()
 export class CsvsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private creatorService: CreatorService,
+  ) {}
 
   async processCsv(file: MulterFileDTO, userEmail: string): Promise<void> {
     const multerFile = {
@@ -75,45 +79,149 @@ export class CsvsService {
     updatedAt: Date;
     data: Influencer[];
   }> {
-    const performanceFile = await this.prisma.performance.findFirst({
-      where: {
-        userEmail: userEmail,
-      },
+    const user = await this.prisma.user.findUnique({
+      where: { email: userEmail },
     });
 
-    if (!performanceFile) {
-      return {
-        updatedAt: performanceFile.updatedAt,
-        data: [],
-      };
-    }
-
-    const filePath = getFilePath(__dirname, performanceFile.uniqueFilename);
-
-    try {
-      const results: any[] = [];
-      const stream = createReadStream(filePath);
-
-      const result = await new Promise<Influencer[]>((resolve, reject) => {
-        stream
-          .pipe(csvParser())
-          .on('data', (data) => results.push(data))
-          .on('end', () => resolve(results))
-          .on('error', (error) => reject(error));
+    if (!user.byPosts) {
+      const performanceFile = await this.prisma.performance.findFirst({
+        where: { userEmail: userEmail },
       });
-      const response = {
-        updatedAt: performanceFile.updatedAt,
-        data: result,
-      };
-      return response;
-    } catch (error) {
-      console.log('error getAllData: ', error);
+
+      if (!performanceFile) {
+        return { updatedAt: null, data: [] };
+      }
+
+      const filePath = getFilePath(__dirname, performanceFile.uniqueFilename);
+
+      try {
+        const results: any[] = [];
+        const stream = createReadStream(filePath);
+
+        const result = await new Promise<Influencer[]>((resolve, reject) => {
+          stream
+            .pipe(csvParser())
+            .on('data', (data) => results.push(data))
+            .on('end', () => resolve(results))
+            .on('error', (error) => reject(error));
+        });
+
+        return {
+          updatedAt: performanceFile.updatedAt,
+          data: result,
+        };
+      } catch (error) {
+        console.log('error getAllData: ', error);
+      }
     }
+
+    const mostRecentUpdatedPost = await this.prisma.posts.findFirst({
+      where: {
+        user: { email: user.email },
+      },
+      orderBy: { updatedAt: 'desc' },
+      take: 1,
+    });
+
+    const posts = await this.prisma.posts.findMany({
+      where: { user: { email: user.email } },
+    });
+
+    console.log('posts.length', posts.length);
+
+    const creatorsData = await this.processPostsData(posts);
+
+    return {
+      updatedAt: mostRecentUpdatedPost.updatedAt,
+      data: creatorsData,
+    };
   }
 
-  // create(createCsvDto: CreateCsvDto) {
-  //   return 'This action adds a new csv';
-  // }
+  async processPostsData(posts: any[]): Promise<Influencer[]> {
+    const groupedPosts = posts.reduce((acc, post) => {
+      if (!acc[post.creatorId]) {
+        acc[post.creatorId] = [];
+      }
+      acc[post.creatorId].push(post);
+      return acc;
+    }, {});
+
+    console.log('groupedPosts', groupedPosts);
+
+    const influencers: Influencer[] = [];
+
+    for (const creatorId in groupedPosts) {
+      const posts = groupedPosts[creatorId];
+      const influencerData = await this.getCreatorData(creatorId, posts);
+      influencers.push(influencerData);
+    }
+
+    return influencers;
+  }
+
+  async getCreatorData(creatorId: string, posts: any[]): Promise<Influencer> {
+    const creatorInfo = await this.creatorService.getCreatorById(creatorId);
+    console.log('creatorId', creatorId);
+
+    const { name, profile, city, image, creator_id } = creatorInfo[0];
+
+    const sum = (key, type = null) =>
+      posts
+        .filter((post) => (type ? post.type === type : true))
+        .reduce((acc, post) => acc + post[key], 0);
+    const count = (type) => posts.filter((post) => post.type === type).length;
+
+    const feedStoriesPosts = posts.filter(
+      (post) => post.type === 'FEED' || post.type === 'STORIES',
+    );
+
+    const engagementAvg = feedStoriesPosts.length
+      ? sum('engagement', 'FEED') +
+        sum('engagement', 'STORIES') / feedStoriesPosts.length
+      : 0;
+
+    return {
+      id: creator_id,
+      Influencer: name,
+      Username: profile,
+      Cidade: city ?? '-',
+      Investimento: sum('price').toString(),
+      Posts: posts.length.toString(),
+      Stories: count('STORIES').toString(),
+      Feed: count('FEED').toString(),
+      Tiktok: count('TIKTOK').toString(),
+      Impressoes: feedStoriesPosts.length
+        ? sum('impressions', 'FEED') + sum('impressions', 'STORIES').toString()
+        : '0',
+      Interacoes: feedStoriesPosts.length
+        ? sum('interactions', 'FEED') +
+          sum('interactions', 'STORIES').toString()
+        : '0',
+      Cliques: feedStoriesPosts.length
+        ? sum('clicks', 'FEED') + sum('clicks', 'STORIES').toString()
+        : '0',
+      'Video Views': sum('isVideo') ? sum('videoViews').toString() : '0',
+      CPE: `R$${(sum('price') / (engagementAvg || 1)).toFixed(2)}`,
+      CTR: ((sum('clicks') / (sum('impressions') || 1)) * 100).toFixed(2) + '%',
+      CPC: `R$${(sum('price') / (sum('clicks') || 1)).toFixed(2)}`,
+      CPV: sum('isVideo')
+        ? `R$${(sum('price') / (sum('videoViews') || 1)).toFixed(2)}`
+        : 'R$0.00',
+      Engajamento: feedStoriesPosts.length
+        ? (
+            sum('engagement', 'FEED') +
+            sum('engagement', 'STORIES') / feedStoriesPosts.length
+          ).toFixed(2) + '%'
+        : '0%',
+      'Engajamento Tiktok': count('TIKTOK')
+        ? (sum('engagement', 'TIKTOK') / (count('TIKTOK') || 1)).toFixed(2) +
+          '%'
+        : '0%',
+      'Cliques Tiktok': sum('clicks', 'TIKTOK').toString(),
+      'Impressoes Tiktok': sum('impressions', 'TIKTOK').toString(),
+      'Url Foto Perfil': image,
+    };
+  }
 
   async findAll({
     start,

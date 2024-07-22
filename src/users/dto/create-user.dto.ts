@@ -7,6 +7,7 @@ export class CreateUserDto {
   totalInitialInvestment: number;
   estimatedExecutedInvestment: number;
   campaignName: string;
+  byPosts: boolean;
   color?: string;
   urlProfilePicture?: string;
 }

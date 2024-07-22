@@ -26,6 +26,7 @@ model User {
   color                       String?
   campaignName                String
   estimatedExecutedInvestment Float         @map(name: "estimated_executed_investment")
+  byPosts                     Boolean       @default(false)
   urlProfilePicture           String?       @map(name: "url_profile_picture")
   attachments                 Attachments[]
   performances                Performance[]
