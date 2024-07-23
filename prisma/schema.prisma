@@ -71,6 +71,7 @@ model Attachments {
   userEmail        String
   // Campaign         Campaign? @relation(fields: [campaignId], references: [id])
   // campaignId       Int?
+  Posts            Posts[]
 }
 
 // model Influencers {
@@ -81,7 +82,7 @@ model Attachments {
 // }
 
 model Posts {
-  id           Int       @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   type         PostsType
   isVideo      Boolean
   impressions  Int
@@ -93,10 +94,10 @@ model Posts {
   postDate     DateTime
   creatorId    String
   creatorName  String
-  // influencersId Int?
-  // influencer    Influencers @relation(fields: [influencerId], references: [id])
+  attachmentId Int?
+  attachment   Attachments? @relation(fields: [attachmentId], references: [id])
   userEmail    String
-  user         User      @relation(fields: [userEmail], references: [email])
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  user         User         @relation(fields: [userEmail], references: [email])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }

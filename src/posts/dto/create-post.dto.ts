@@ -1,9 +1,4 @@
-import {
-  //  Influencers,
-  Performance,
-  PostsType,
-  User,
-} from '@prisma/client';
+import { Attachments, PostsType, User } from '@prisma/client';
 
 export class CreatePostDto {
   type: PostsType;
@@ -17,11 +12,8 @@ export class CreatePostDto {
   postDate: string;
   creatorId: string;
   creatorName: string;
-  // influencerId?: string;
-  // influencer?: Influencers;
-  // performanceId?: number;
-  // performance?: Performance;
-
+  attachmentId?: number;
+  attachment?: Attachments;
   userEmail?: string;
   user?: User;
 }
