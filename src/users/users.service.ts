@@ -53,15 +53,6 @@ export class UsersService {
       },
     });
 
-    // id               Int      @id @default(autoincrement())
-    // uniqueFilename   String
-    // originalFilename String
-    // fileSize         Int
-    // createdAt        DateTime @default(now())
-    // updatedAt        DateTime @updatedAt
-    // user             User     @relation(fields: [userEmail], references: [email])
-    // userEmail        String
-
     await this.prisma.attachments.create({
       data: {
         uniqueFilename: multerFile.uniqueFilename,
