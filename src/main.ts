@@ -44,10 +44,6 @@ async function bootstrap() {
     prefix: '/public',
   });
 
-  const csvsService = app.get(CsvsService);
-  const attachmentService = app.get(AttachmentsService);
-  const usersService = app.get(UsersService);
-
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.useGlobalPipes(
     new ValidationPipe({
