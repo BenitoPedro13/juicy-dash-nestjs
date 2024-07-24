@@ -10,9 +10,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createPostDto: CreatePostDto): Promise<Posts | null> {
+  async create(createPostDto: CreatePostDto): Promise<Posts | null> {
     try {
-      return this.prisma.posts.create({
+      return await this.prisma.posts.create({
         data: createPostDto as Prisma.PostsCreateInput,
       });
     } catch (error) {
@@ -48,6 +48,7 @@ export class PostsService {
         orderBy: orderBy,
         include: {
           user: true,
+          attachment: true,
         },
       };
 
@@ -96,6 +97,7 @@ export class PostsService {
       },
       include: {
         user: true,
+        attachment: true,
       },
     });
 
@@ -117,6 +119,7 @@ export class PostsService {
         where: { id },
         include: {
           user: true,
+          attachment: true,
         },
       });
     } catch (error) {

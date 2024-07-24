@@ -1,18 +1,10 @@
 import 'dotenv/config';
-import fs from 'fs';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { useContainer } from 'class-validator';
-
-import { CsvsService } from './csvs/csvs.service';
-import { UsersService } from './users/users.service';
-
-import { AttachmentsService } from './attachments/attachments.service';
-import { v4 as uuidv4 } from 'uuid';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import path, { join } from 'path';
-// import { join } from 'path';
+import { join } from 'path';
 
 async function bootstrap() {
   const logger = new Logger('App');
@@ -43,10 +35,6 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', '..', 'files'), {
     prefix: '/public',
   });
-
-  const csvsService = app.get(CsvsService);
-  const attachmentService = app.get(AttachmentsService);
-  const usersService = app.get(UsersService);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.useGlobalPipes(
