@@ -4,7 +4,7 @@ import { User } from '.prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { sortFields, sortOrder } from 'types/queyParams';
-import { Prisma } from '@prisma/client';
+import { Attachments, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { MulterFileDTO } from 'src/csvs/csvs.service';
 import path from 'path';
@@ -73,7 +73,7 @@ export class UsersService {
   async processAttachment(
     file: MulterFileDTO,
     userEmail: string,
-  ): Promise<void> {
+  ): Promise<Attachments> {
     const multerFile = {
       uniqueFilename: `${Date.now()}-${file?.originalname ?? ''}`,
       buffer: file.buffer,
@@ -95,25 +95,7 @@ export class UsersService {
       }
     });
 
-    // await this.prisma.attachments.deleteMany({
-    //   where: {
-    //     uniqueFilename: {
-    //       contains: userEmail,
-    //     },
-    //     userEmail,
-    //   },
-    // });
-
-    // id               Int      @id @default(autoincrement())
-    // uniqueFilename   String
-    // originalFilename String
-    // fileSize         Int
-    // createdAt        DateTime @default(now())
-    // updatedAt        DateTime @updatedAt
-    // user             User     @relation(fields: [userEmail], references: [email])
-    // userEmail        String
-
-    await this.prisma.attachments.create({
+    const attachment = await this.prisma.attachments.create({
       data: {
         uniqueFilename: multerFile.uniqueFilename,
         originalFilename: file.originalname,
@@ -122,12 +104,9 @@ export class UsersService {
       },
     });
 
-    // await this.prisma.user.update({
-    //   data: {
-    //     urlProfilePicture: `/public/${multerFile.uniqueFilename}`,
-    //   },
-    //   where: { email: userEmail },
-    // });
+    console.log('attachment', attachment);
+
+    return attachment;
   }
 
   async findAll({

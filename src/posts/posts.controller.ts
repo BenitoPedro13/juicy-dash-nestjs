@@ -7,28 +7,20 @@ import {
   Param,
   Delete,
   Query,
-  UseInterceptors,
-  UploadedFile,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { sortOrder, sortFields } from 'types/queyParams';
 import { Posts } from '@prisma/client';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { MulterFileDTO } from 'src/csvs/csvs.service';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  async create(
-    @Body() createPostDto: CreatePostDto,
-    @UploadedFile() file: MulterFileDTO,
-  ) {
-    return await this.postsService.create(createPostDto, file);
+  async create(@Body() createPostDto: CreatePostDto) {
+    return await this.postsService.create(createPostDto);
   }
 
   @Get()

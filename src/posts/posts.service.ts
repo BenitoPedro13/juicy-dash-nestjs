@@ -5,91 +5,19 @@ import { sortFields, sortOrder } from 'types/queyParams';
 import { Posts, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { MulterFileDTO } from 'src/csvs/csvs.service';
-import path from 'path';
-import fs from 'fs';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(
-    createPostDto: CreatePostDto,
-    file: MulterFileDTO,
-  ): Promise<Posts | null> {
+  async create(createPostDto: CreatePostDto): Promise<Posts | null> {
     try {
-      const post = await this.prisma.posts.create({
+      return await this.prisma.posts.create({
         data: createPostDto as Prisma.PostsCreateInput,
       });
-
-      const updatedPost = await this.processPostAttachment(
-        post,
-        file,
-        post.userEmail,
-      );
-
-      return updatedPost;
     } catch (error) {
       console.error('PostsService.create Error: ', error);
     }
-  }
-
-  async processPostAttachment(
-    post: Posts,
-    file: MulterFileDTO,
-    userEmail: string,
-  ) {
-    const multerFile = {
-      uniqueFilename: `${Date.now()}-postid-${post.id}-${
-        file?.originalname ?? ''
-      }`,
-      buffer: file.buffer,
-      originalname: file.originalname,
-      userEmail: userEmail,
-    };
-    console.log(multerFile);
-
-    // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
-
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, multerFile.uniqueFilename);
-
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
-
-    await this.prisma.attachments.deleteMany({
-      where: {
-        uniqueFilename: {
-          contains: `postid-${post.id}`,
-        },
-        userEmail,
-      },
-    });
-
-    const attachment = await this.prisma.attachments.create({
-      data: {
-        uniqueFilename: multerFile.uniqueFilename,
-        originalFilename: file.originalname,
-        fileSize: file.buffer.length,
-        userEmail: userEmail,
-      },
-    });
-
-    return await this.prisma.posts.update({
-      data: {
-        attachmentId: attachment.id,
-      },
-      include: {
-        user: true,
-        attachment: true,
-      },
-      where: { userEmail, id: post.id },
-    });
   }
 
   async findAll({

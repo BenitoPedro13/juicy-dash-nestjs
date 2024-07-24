@@ -13,7 +13,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from '@prisma/client';
+import { Attachments, User } from '@prisma/client';
 import { sortFields, sortOrder } from 'types/queyParams';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterFileDTO } from 'src/csvs/csvs.service';
@@ -41,8 +41,8 @@ export class UsersController {
   async uploadAttachment(
     @Body() body: { user_email: string },
     @UploadedFile() file: MulterFileDTO,
-  ): Promise<void> {
-    await this.usersService.processAttachment(file, body.user_email);
+  ): Promise<Attachments> {
+    return await this.usersService.processAttachment(file, body.user_email);
   }
 
   @Get()
