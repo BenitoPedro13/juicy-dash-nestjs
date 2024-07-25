@@ -28,6 +28,7 @@ model User {
   estimatedExecutedInvestment Float         @map(name: "estimated_executed_investment")
   byPosts                     Boolean       @default(false)
   urlProfilePicture           String?       @map(name: "url_profile_picture")
+  isDeleted                   Boolean?      @default(false)
   attachments                 Attachments[]
   performances                Performance[]
   Posts                       Posts[]
