@@ -45,6 +45,11 @@ export class UsersController {
     return await this.usersService.processAttachment(file, body.user_email);
   }
 
+  @Post('duplicate')
+  async duplicateUser(@Body() body: { user_email: string }): Promise<void> {
+    await this.usersService.duplicateUser(body.user_email);
+  }
+
   @Get()
   async findAll(
     @Query('_start') start?: string,

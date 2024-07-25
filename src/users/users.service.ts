@@ -167,6 +167,36 @@ export class UsersService {
     }
   }
 
+  async duplicateUser(userEmail: string) {
+    try {
+      const initialUser = await this.prisma.user.findUnique({
+        where: {
+          email: userEmail,
+          isDeleted: false,
+        },
+      });
+
+      if (!initialUser) {
+        throw new Error('User not found or has been deleted');
+      }
+
+      // Delete non-relevant fields
+      delete initialUser.id;
+      delete initialUser.createdAt;
+      delete initialUser.updatedAt;
+
+      const randomNumber = Math.floor(1000 + Math.random() * 9000);
+
+      initialUser.email = `copy-${randomNumber}-${initialUser.email}`;
+
+      return await this.prisma.user.create({
+        data: initialUser as Prisma.UserCreateInput,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async findOne(id: number): Promise<User | null> {
     return await this.prisma.user.findUnique({
       where: { id, isDeleted: false },
