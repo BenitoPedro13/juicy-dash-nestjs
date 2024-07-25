@@ -137,19 +137,21 @@ export class UsersService {
               contains: name,
               mode: 'insensitive',
             },
+            isDeleted: false,
           }
-        : undefined;
+        : {
+            isDeleted: false,
+          };
 
       const findManyPayload: Prisma.UserFindManyArgs<DefaultArgs> = {
         take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: { performances: true },
+        where: {
+          isDeleted: false,
+        },
       };
-
-      if (where !== undefined) {
-        findManyPayload.where = where;
-      }
 
       const result = await this.prisma.user.findMany(findManyPayload);
 
@@ -167,14 +169,14 @@ export class UsersService {
 
   async findOne(id: number): Promise<User | null> {
     return await this.prisma.user.findUnique({
-      where: { id },
+      where: { id, isDeleted: false },
       include: { performances: true, attachments: true },
     });
   }
 
   async findOneByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({
-      where: { email },
+      where: { email, isDeleted: false },
     });
   }
 
@@ -186,6 +188,27 @@ export class UsersService {
   }
 
   async remove(id: number): Promise<User | null> {
-    return await this.prisma.user.delete({ where: { id } });
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { isDeleted: true },
+    });
+
+    await this.prisma.performance.deleteMany({
+      where: {
+        user: {
+          id,
+        },
+      },
+    });
+
+    await this.prisma.attachments.deleteMany({
+      where: {
+        user: {
+          id,
+        },
+      },
+    });
+
+    return user;
   }
 }
