@@ -146,7 +146,7 @@ export class CsvsService {
       return acc;
     }, {});
 
-    console.log('groupedPosts', groupedPosts);
+    // console.log('groupedPosts', groupedPosts);
 
     const influencers: Influencer[] = [];
 
@@ -175,10 +175,38 @@ export class CsvsService {
       (post) => post.type === 'FEED' || post.type === 'STORIES',
     );
 
-    const engagementAvg = feedStoriesPosts.length
-      ? sum('engagement', 'FEED') +
-        sum('engagement', 'STORIES') / feedStoriesPosts.length
+    const interactions: number = feedStoriesPosts.length
+      ? sum('interactions', 'FEED') + sum('interactions', 'STORIES')
       : 0;
+
+    const impressions: number = feedStoriesPosts.length
+      ? sum('impressions', 'FEED') + sum('impressions', 'STORIES')
+      : 0;
+
+    const engagement = feedStoriesPosts.length
+      ? (Math.floor((interactions / impressions) * 1000) / 1000).toFixed(3) +
+        '%'
+      : '0%';
+
+    const tiktokEngagement = count('TIKTOK')
+      ? (
+          Math.floor(
+            (sum('clicks', 'TIKTOK') / sum('impressions', 'TIKTOK')) * 1000,
+          ) / 1000
+        ).toFixed(3) + '%'
+      : '0%';
+
+    const clicks = feedStoriesPosts.length
+      ? sum('clicks', 'FEED') + sum('clicks', 'STORIES')
+      : 0;
+
+    const videoViews = sum('isVideo') ? sum('videoViews') : 0;
+
+    const CPE = `R$${(sum('price') / (interactions || 1)).toFixed(2)}`;
+
+    const CPC = `R$${(sum('price') / (clicks || 1)).toFixed(2)}`;
+
+    const CPV = `R$${(sum('price') / (videoViews || 1)).toFixed(2)}`;
 
     return {
       id: creator_id,
@@ -190,33 +218,16 @@ export class CsvsService {
       Stories: count('STORIES').toString(),
       Feed: count('FEED').toString(),
       Tiktok: count('TIKTOK').toString(),
-      Impressoes: feedStoriesPosts.length
-        ? sum('impressions', 'FEED') + sum('impressions', 'STORIES').toString()
-        : '0',
-      Interacoes: feedStoriesPosts.length
-        ? sum('interactions', 'FEED') +
-          sum('interactions', 'STORIES').toString()
-        : '0',
-      Cliques: feedStoriesPosts.length
-        ? sum('clicks', 'FEED') + sum('clicks', 'STORIES').toString()
-        : '0',
-      'Video Views': sum('isVideo') ? sum('videoViews').toString() : '0',
-      CPE: `R$${(sum('price') / (engagementAvg || 1)).toFixed(2)}`,
+      Impressoes: impressions.toString(),
+      Interacoes: interactions.toString(),
+      Cliques: clicks.toString(),
+      'Video Views': videoViews.toString(),
+      CPE: CPE,
       CTR: ((sum('clicks') / (sum('impressions') || 1)) * 100).toFixed(2) + '%',
-      CPC: `R$${(sum('price') / (sum('clicks') || 1)).toFixed(2)}`,
-      CPV: sum('isVideo')
-        ? `R$${(sum('price') / (sum('videoViews') || 1)).toFixed(2)}`
-        : 'R$0.00',
-      Engajamento: feedStoriesPosts.length
-        ? (
-            sum('engagement', 'FEED') +
-            sum('engagement', 'STORIES') / feedStoriesPosts.length
-          ).toFixed(2) + '%'
-        : '0%',
-      'Engajamento Tiktok': count('TIKTOK')
-        ? (sum('engagement', 'TIKTOK') / (count('TIKTOK') || 1)).toFixed(2) +
-          '%'
-        : '0%',
+      CPC: CPC,
+      CPV: CPV,
+      Engajamento: engagement,
+      'Engajamento Tiktok': tiktokEngagement,
       'Cliques Tiktok': sum('clicks', 'TIKTOK').toString(),
       'Impressoes Tiktok': sum('impressions', 'TIKTOK').toString(),
       'Url Foto Perfil': image,
