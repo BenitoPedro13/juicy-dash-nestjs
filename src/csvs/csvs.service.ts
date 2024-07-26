@@ -184,15 +184,19 @@ export class CsvsService {
       : 0;
 
     const engagement = feedStoriesPosts.length
-      ? (Math.floor((interactions / impressions) * 1000) / 1000).toFixed(3) +
-        '%'
+      ? (
+          (Math.floor((interactions / impressions) * 1000) / 1000) *
+          100
+        ).toFixed(3) + '%'
       : '0%';
 
     const tiktokEngagement = count('TIKTOK')
       ? (
-          Math.floor(
+          (Math.floor(
             (sum('clicks', 'TIKTOK') / sum('impressions', 'TIKTOK')) * 1000,
-          ) / 1000
+          ) /
+            1000) *
+          100
         ).toFixed(3) + '%'
       : '0%';
 
